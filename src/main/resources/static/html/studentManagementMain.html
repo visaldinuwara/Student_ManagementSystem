@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management Portal | Sri Vinayalankara Dahampasala</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --bg-light: #f8f9fa;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid #edf2f7;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+            border-color: var(--accent);
+        }
+
+        .icon-box {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .action-card:hover .icon-box {
+            transform: scale(1.1);
+        }
+
+        /* Color Themes for Cards */
+        .add-card .icon-box { background: rgba(39, 174, 96, 0.1); color: var(--success); }
+        .search-card .icon-box { background: rgba(52, 152, 219, 0.1); color: var(--accent); }
+        .update-card .icon-box { background: rgba(243, 156, 18, 0.1); color: var(--warning); }
+        .delete-card .icon-box { background: rgba(231, 76, 60, 0.1); color: var(--danger); }
+
+        .action-card h3 {
+            font-size: 1.25rem;
+            margin: 0;
+            color: var(--primary);
+        }
+
+        .action-card p {
+            font-size: 0.9rem;
+            color: #718096;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .portal-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-header::after {
+            content: "\f654";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            font-size: 12rem;
+            opacity: 0.05;
+        }
+
+        .stats-summary {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value { font-size: 1.5rem; font-weight: 600; }
+        .stat-label { font-size: 0.8rem; opacity: 0.8; text-transform: uppercase; }
+
+        @media (max-width: 768px) {
+            .stats-summary { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-dharmachakra"></i>
+                <h2 style="font-size: 1.1rem;">Sri Vinayalankara Dahampasala</h2>
+            </div>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-th-large"></i> Home Page</a></li>
+                <li><a href="manageStudents.html" class="active"><i class="fas fa-user-graduate"></i> Student Portal</a></li>
+                <li><a href="addStudent.html"><i class="fas fa-plus-circle"></i> Add Student</a></li>
+                <li><a href="searchStudent.html"><i class="fas fa-search"></i> Search Records</a></li>
+                <li><a href="updateStudent.html"><i class="fas fa-edit"></i> Edit Records</a></li>
+                <li><a href="deleteStudent.html"><i class="fas fa-trash-alt"></i> Remove Student</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <span class="breadcrumb">Main Dashboard > Student Management</span>
+            </header>
+
+            <div class="content-section">
+                <!-- Portal Welcome Header -->
+                <div class="portal-header">
+                    <h1>Student Administration</h1>
+                    <p>Centralized system to manage student records, attendance, and academic progress.</p>
+                    
+                    <div class="stats-summary">
+                        <div class="stat-item">
+                            <span class="stat-value">Active</span>
+                            <span class="stat-label">System Status</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">2026</span>
+                            <span class="stat-label">Academic Year</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CRUD Operations Grid -->
+                <div class="portal-grid">
+                    <!-- CREATE -->
+                    <a href="addStudent.html" class="action-card add-card">
+                        <div class="icon-box">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h3>Add Student</h3>
+                        <p>Enroll a new student into the Dahampasala registry.</p>
+                    </a>
+
+                    <!-- READ -->
+                    <a href="searchStudent.html" class="action-card search-card">
+                        <div class="icon-box">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Search & View</h3>
+                        <p>Find student profiles and view their personal details.</p>
+                    </a>
+
+                    <!-- UPDATE -->
+                    <a href="updateStudent.html" class="action-card update-card">
+                        <div class="icon-box">
+                            <i class="fas fa-user-edit"></i>
+                        </div>
+                        <h3>Update Info</h3>
+                        <p>Modify existing student records and contact information.</p>
+                    </a>
+
+                    <!-- DELETE -->
+                    <a href="deleteStudent.html" class="action-card delete-card">
+                        <div class="icon-box">
+                            <i class="fas fa-user-minus"></i>
+                        </div>
+                        <h3>Remove Student</h3>
+                        <p>Archive or delete student records from the database.</p>
+                    </a>
+                </div>
+
+                <!-- Footer Info -->
+                <div style="margin-top: 50px; padding: 20px; border-top: 1px solid #eee; color: #888; font-size: 0.85rem; text-align: center;">
+                    <p>&copy; 2026 Sri Vinayalankara Dahampasala - Student Management System v1.0</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

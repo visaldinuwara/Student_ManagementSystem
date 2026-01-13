@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Vinayalankara Dahampasala - Student Management</title>
+    <link rel="stylesheet" href="../css/styles.css">    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+
+    <div class="container">
+        <!-- Unified Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-dharmachakra"></i>
+                <h2 class="brand-text">Sri Vinayalankara Dahampasala</h2>
+            </div>
+            <ul>
+                <li><a href="#" id="dashNav" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="studentManagementMain.html" id="manageNavBtn"><i class="fas fa-user-graduate"></i> Manage Students</a></li>
+                <li><a href="#" id="settingsNav"><i class="fas fa-cog"></i> System Settings</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 class="class-title">SRI VINAYALANKARA DAHAMPASALA - STUDENT ADMINISTRATION</h1>
+            </header>
+
+            <!-- Dashboard Statistics -->
+            <section class="stats">
+                <div class="card"><div class="card-info"><h3>Total Students</h3><p id="totalCount">450</p></div><i class="fas fa-users icon-blue"></i></div>
+                <div class="card"><div class="card-info"><h3>Attending</h3><p id="activeCount">410</p></div><i class="fas fa-check icon-green"></i></div>
+                <div class="card"><div class="card-info"><h3>New Entries</h3><p id="newCount">8</p></div><i class="fas fa-plus icon-orange"></i></div>
+            </section>
+
+            <!-- Home Section -->
+            <div id="homeSection" class="content-section">
+                <div class="welcome-section">
+                    <h2>Welcome, Administrator</h2>
+                    <p>Manage the student records for Sri Vinayalankara Dahampasala. Access the Student Directory to add, edit, or remove student information.</p>
+                </div>
+            </div>
+
+            <!-- Combined Management Section -->
+            <div id="manageSection" class="content-section" style="display: none;">
+                <div class="management-header">
+                    <h2><i class="fas fa-users-cog"></i> Student Directory</h2>
+                    <button class="btn-primary" id="openAddModal">
+                        <i class="fas fa-user-plus"></i> Register New Student
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="management-header">
+                        <div class="search-bar-container">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="globalSearch" placeholder="Search by name, Admission No, or Grade..." onkeyup="filterStudents()">
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Admission No</th>
+                                    <th>Full Name</th>
+                                    <th>Grade</th>
+                                    <th>Parent/Guardian</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mainStudentTable">
+                                <!-- Example Row -->
+                                <tr>
+                                    <td>#SVD-1024</td>
+                                    <td><strong>K. M. Pathum Bandara</strong></td>
+                                    <td>Grade 08</td>
+                                    <td>S. Bandara</td>
+                                    <td><span class="status-pill">Active</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="action-btn edit-btn" onclick="openUpdateModal('K. M. Pathum Bandara', 'Grade 08', 'S. Bandara')">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                            <button class="action-btn delete-btn" onclick="confirmDelete('#SVD-1024')">
+                                                <i class="fas fa-trash"></i> Remove
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Combined Modal for Add/Update -->
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Register New Student</h2>
+            <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+            <form id="studentForm">
+                <input type="hidden" id="editIndex">
+                <div class="form-group">
+                    <label>Student Full Name</label>
+                    <input type="text" id="studentName" required placeholder="Enter student's name">
+                </div>
+                <div class="form-group">
+                    <label>Grade / Class</label>
+                    <select id="studentGrade" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd;">
+                        <option value="Grade 01">Grade 01</option>
+                        <option value="Grade 02">Grade 02</option>
+                        <option value="Grade 03">Grade 03</option>
+                        <option value="Grade 04">Grade 04</option>
+                        <option value="Grade 05">Grade 05</option>
+                        <option value="Grade 06">Grade 06</option>
+                        <option value="Grade 07">Grade 07</option>
+                        <option value="Grade 08">Grade 08</option>
+                        <option value="Grade 09">Grade 09</option>
+                        <option value="Grade 10">Grade 10</option>
+                        <option value="Dharmacharya">Dharmacharya</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Parent/Guardian Contact</label>
+                    <input type="text" id="parentContact" required placeholder="Name or Phone Number">
+                </div>
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button type="submit" class="btn-primary" id="submitBtn">Save Student Record</button>
+                    <button type="button" class="btn-primary" onclick="closeModal()" style="background-color: #94a3b8;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>

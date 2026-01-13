@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Student | Sri Vinayalankara Dahampasala</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-dharmachakra"></i>
+                <h2 style="font-size: 1.1rem;">Sri Vinayalankara Dahampasala</h2>
+            </div>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-th-large"></i> Home Page</a></li>
+                <li><a href="manageStudents.html"><i class="fas fa-user-graduate"></i> Student Portal</a></li>
+                <li><a href="addStudent.html"><i class="fas fa-plus-circle"></i> Add Student</a></li>
+                <li><a href="searchStudent.html" class="active"><i class="fas fa-search"></i> Search Records</a></li>
+                <li><a href="updateStudent.html"><i class="fas fa-edit"></i> Edit Records</a></li>
+                <li><a href="deleteStudent.html"><i class="fas fa-trash-alt"></i> Remove Student</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <span class="breadcrumb">Student Portal > Search Records</span>
+                <!-- Removed Computer Science Title -->
+            </header>
+
+            <div class="content-section">
+                <div class="card">
+                    <h2><i class="fas fa-search"></i> Find Student Record</h2>
+                    <p style="color: #718096; margin-bottom: 20px;">Locate student profiles by searching their name or unique identifiers.</p>
+                    
+                    <div class="search-container" style="display: flex; gap: 10px; margin-top: 20px;">
+                        <input type="text" id="searchQuery" placeholder="Enter Full Name, Phone Number or Index..." style="flex: 1; padding: 12px; border-radius: 5px; border: 1px solid #ddd; font-family: inherit;">
+                        <button class="btn-primary" id="btnSearch" style="padding: 0 25px;">Search Now</button>
+                    </div>
+
+                    <div id="searchResultDisplay" style="margin-top: 30px;">
+                        <!-- Results will be injected here via script.js -->
+                        <div style="text-align: center; color: #a0aec0; padding: 40px;">
+                            <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                            Enter search criteria above to display student details.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View All Students | SMS Admin</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header"><i class="fas fa-university"></i><h2>Admin Panel</h2></div>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="addStudent.html"><i class="fas fa-plus-circle"></i> Add Student</a></li>
+                <li><a href="viewAllStudents.html" class="active"><i class="fas fa-list"></i> View All</a></li>
+                <li><a href="searchStudent.html"><i class="fas fa-search"></i> Search</a></li>
+                <li><a href="updateStudent.html"><i class="fas fa-user-edit"></i> Update</a></li>
+                <li><a href="deleteStudent.html"><i class="fas fa-trash-alt"></i> Delete</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 class="class-title">COMPUTER SCIENCE - 2026</h1>
+            </header>
+
+            <div class="content-section">
+                <!-- Summary Stats -->
+                <div class="stats-summary">
+                    <div class="stat-card">
+                        <h4>Total Students</h4>
+                        <p id="totalCount">42</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Active</h4>
+                        <p style="color: #38a169;">38</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Graduating</h4>
+                        <p style="color: #3182ce;">2026</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-controls">
+                        <h2><i class="fas fa-users"></i> Student Registry</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-primary" onclick="window.print()" style="background-color: #718096;">
+                                <i class="fas fa-print"></i> Export PDF
+                            </button>
+                            <input type="text" id="filterTable" placeholder="Quick filter..." style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px;">
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Student Name</th>
+                                    <th>Grade</th>
+                                    <th>Contact</th>
+                                    <th>Joined Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentTableBody">
+                                <!-- Example Rows -->
+                                <tr>
+                                    <td>#001</td>
+                                    <td><strong>Johnathan Doe</strong></td>
+                                    <td>Grade 12</td>
+                                    <td>0771234567</td>
+                                    <td>2023-01-15</td>
+                                    <td><span class="badge badge-active">Active</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="btn-icon" title="Edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#002</td>
+                                    <td><strong>Jane Smith</strong></td>
+                                    <td>Grade 12</td>
+                                    <td>0777654321</td>
+                                    <td>2023-02-10</td>
+                                    <td><span class="badge badge-active">Active</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="btn-icon" title="Edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Student | Sri Vinayalankara Dahampasala</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-dharmachakra"></i>
+                <h2 style="font-size: 1.1rem;">Sri Vinayalankara Dahampasala</h2>
+            </div>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-th-large"></i> Home Page</a></li>
+                <li><a href="manageStudents.html"><i class="fas fa-user-graduate"></i> Student Portal</a></li>
+                <li><a href="addStudent.html"><i class="fas fa-plus-circle"></i> Add Student</a></li>
+                <li><a href="searchStudent.html"><i class="fas fa-search"></i> Search Records</a></li>
+                <li><a href="updateStudent.html" class="active"><i class="fas fa-edit"></i> Edit Records</a></li>
+                <li><a href="deleteStudent.html"><i class="fas fa-trash-alt"></i> Remove Student</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-bar">
+                <span class="breadcrumb">Student Portal > Edit Records</span>
+            </header>
+
+            <div class="content-section">
+                <!-- Step 1: Identification -->
+                <div class="card" style="margin-bottom: 25px;">
+                    <h2><i class="fas fa-id-card"></i> 1. Search Student to Update</h2>
+                    <p style="color: #718096; margin-bottom: 15px; font-size: 0.9rem;">Please fetch the existing record first before making modifications.</p>
+                    <div class="search-container" style="display: flex; gap: 10px;">
+                        <input type="text" id="updateSearchId" placeholder="Enter Registration Number or Name..." style="flex: 1; padding: 12px; border-radius: 5px; border: 1px solid #ddd; font-family: inherit;">
+                        <button class="btn-primary" id="btnFetch" style="padding: 0 25px;">Fetch Record</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Comprehensive Update Form -->
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2 style="margin: 0;"><i class="fas fa-edit"></i> 2. Modify Student Details</h2>
+                        <span id="updateStatus" style="font-size: 0.85rem; color: #718096;"><i class="fas fa-history"></i> Last fetched: Never</span>
+                    </div>
+                    
+                    <form id="updateForm">
+                        <div class="form-grid">
+                            
+                            <!-- Personal Info Section -->
+                            <div class="form-section-title" style="grid-column: 1 / -1; margin-top: 0;"><i class="fas fa-user"></i> Personal Information</div>
+                            
+                            <div class="form-group full-width">
+                                <label>Full Name</label>
+                                <input type="text" id="fullName" name="fullName" placeholder="Full name as per Birth Certificate">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Birth Date</label>
+                                <input type="date" id="birthDate" name="birthDate">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Current Grade</label>
+                                <input type="number" id="grade" name="grade" placeholder="e.g. 5">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" id="phoneNo" name="phoneNo" placeholder="Contact number">
+                            </div>
+
+                            <div class="form-group">
+                                <label>WhatsApp Number</label>
+                                <input type="tel" id="whatsAppNo" name="whatsAppNo" placeholder="For announcements">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Admission Date</label>
+                                <input type="date" id="addmissionDate" name="addmissionDate">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Future Goal</label>
+                                <input type="text" id="futureGoal" name="futureGoal" placeholder="Aspirations">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label>Address</label>
+                                <textarea id="address" name="address" rows="2" style="width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #ddd; font-family: inherit; resize: vertical;"></textarea>
+                            </div>
+
+                            <!-- Guardian Info Section -->
+                            <div class="form-section-title" style="grid-column: 1 / -1; border-top: 1px solid #edf2f7; padding-top: 25px; margin-top: 15px;">
+                                <i class="fas fa-users"></i> Guardian Information
+                            </div>
+
+                            <div class="form-group">
+                                <label>Guardian Name</label>
+                                <input type="text" id="guardianName" name="guardianName" placeholder="Parent or Guardian Name">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Guardian NIC</label>
+                                <input type="text" id="guardianNIC" name="guardianNIC" placeholder="NIC Number">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label>Occupation</label>
+                                <input type="text" id="occupation" name="occupation" placeholder="Guardian's current employment">
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div style="margin-top: 30px; display: flex; gap: 15px; border-top: 1px solid #edf2f7; padding-top: 25px;">
+                            <button type="submit" class="btn-primary" style="background-color: #38a169; border-color: #38a169; padding: 12px 30px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <button type="button" onclick="window.location.reload()" class="btn-secondary" style="padding: 12px 25px; border-radius: 6px; border: 1px solid #cbd5e0; cursor: pointer; background: #fff; color: #4a5568; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-undo"></i> Reset Form
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+</html>
