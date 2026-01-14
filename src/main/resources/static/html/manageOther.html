@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Other Details | Sri Vinayalankara Dahampasala</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <style>
+        /* Portal specific grid for the main cards */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .portal-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--accent-yellow);
+        }
+
+        .portal-icon {
+            font-size: 3rem;
+            color: var(--sidebar-bg);
+            background: #f8fafc;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .portal-card:hover .portal-icon {
+            background: var(--accent-yellow);
+            color: var(--sidebar-bg);
+        }
+
+        .portal-card h3 {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .portal-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-dharmachakra fa-3x" style="color: var(--accent-yellow);"></i>
+                <h2 class="brand-text">Sri Vinayalankara Dahampasala</h2>
+            </div>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="manageOther.html" class="active"><i class="fas fa-layer-group"></i> Manage Other Details</a></li>
+                <li><a href="addStudent.html"><i class="fas fa-plus-circle"></i> Add Student</a></li>
+                <li><a href="viewAll.html"><i class="fas fa-table-list"></i> View All</a></li>
+                <li><a href="searchStudent.html"><i class="fas fa-search"></i> Search</a></li>
+                <li><a href="updateStudent.html"><i class="fas fa-user-edit"></i> Update</a></li>
+                <li><a href="deleteStudent.html"><i class="fas fa-trash-alt"></i> Delete</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>MANAGE OTHER DETAILS</h1>
+            </header>
+
+            <div class="content-section">
+                <div class="portal-grid">
+                    
+                    <a href="studentAttendence.html" class="portal-card">
+                        <div class="portal-icon"><i class="fas fa-calendar-check"></i></div>
+                        <h3>Student Attendance</h3>
+                        <p>Track and manage daily student presence and records.</p>
+                    </a>
+
+                    <a href="studentMarks.html" class="portal-card">
+                        <div class="portal-icon"><i class="fas fa-file-invoice"></i></div>
+                        <h3>Academic Marks</h3>
+                        <p>Enter and review exam results and term marks.</p>
+                    </a>
+
+                    <a href="studentRank.html" class="portal-card">
+                        <div class="portal-icon"><i class="fas fa-medal"></i></div>
+                        <h3>Rank & Responsibility</h3>
+                        <p>Manage Prefect roles, Monitor positions, and leadership marks.</p>
+                    </a>
+
+                    <a href="parentObservations.html" class="portal-card">
+                        <div class="portal-icon"><i class="fas fa-eye"></i></div>
+                        <h3>Parent Observation</h3>
+                        <p>Log behavioral and participation scores provided by parents.</p>
+                    </a>
+
+                    <a href="externalActivities.html" class="portal-card">
+                        <div class="portal-icon"><i class="fas fa-running"></i></div>
+                        <h3>External Activities</h3>
+                        <p>Manage sports, competitions, and extracurricular records.</p>
+                    </a>
+
+                    <a href="specialProgrammes.html" class="portal-card">
+                        <div class="portal-icon"><i class="fas fa-star"></i></div>
+                        <h3>Special Programmes</h3>
+                        <p>Information on Dahampasala events and workshops.</p>
+                    </a>
+
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import com.dhampasala.student.student_management.HibernateUtil;
 import com.dhampasala.student.student_management.model.entity.Rank;
-
+@Repository
 public class RankRepo {
       public void addRank(Rank rank){
         Transaction tx=null;

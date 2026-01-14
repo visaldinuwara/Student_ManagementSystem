@@ -3,210 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>External Activities | Sri Vinayalankara</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>External Activities | Sri Vinayalankara Dahampasala</title>
+    <link rel="stylesheet" href="../css/stylesForOther.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #2d3748;
-            --accent: #e67e22;
-            --danger: #e53e3e;
-            --success: #38a169;
-            --info: #3182ce;
-            --bg: #f7fafc;
-            --border: #e2e8f0;
+        /* Specific tweaks for activity checkboxes to fit the new layout */
+        .activity-checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 15px 0;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
         }
-
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; color: var(--primary); }
-        .navbar { background: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        .main-container { max-width: 1300px; margin: 30px auto; padding: 0 20px; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
-
-        /* Form Layout */
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
-        .checkbox-group { display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
-        .checkbox-group:hover { background: #edf2f7; }
-        .full-width { grid-column: 1 / -1; }
-        
-        .input-field { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border); box-sizing: border-box; }
-        label { font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; display: block; }
-
-        /* Table & Badges */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background: #f8fafc; text-align: left; padding: 12px; border-bottom: 2px solid var(--border); font-size: 0.7rem; color: #718096; text-transform: uppercase; }
-        td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
-        .status-badge { padding: 2px 6px; border-radius: 8px; font-size: 0.65rem; font-weight: bold; }
-        .status-true { background: #c6f6d5; color: #22543d; }
-        .status-false { background: #fed7d7; color: #822727; }
-
-        /* Buttons */
-        .btn { padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; border: none; display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; }
-        .btn-save { background: var(--accent); color: white; }
-        .btn-update { background: var(--success); color: white; display: none; }
-        .btn-outline { background: white; border: 1px solid var(--border); color: var(--primary); }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .checkbox-item input { width: auto; margin: 0; }
     </style>
 </head>
-<body>
 
+<body>
     <nav class="navbar">
         <div style="display: flex; align-items: center; gap: 15px;">
-            <i class="fas fa-skating fa-2x"></i>
-            <h1 style="font-size: 1.2rem; margin: 0;">External Activities Manager</h1>
+            <i class="fas fa-dharmachakra fa-2x" style="color: #f1c40f;"></i>
+            <h1 style="font-size: 1.2rem; margin: 0; letter-spacing: 0.5px;">Sri Vinayalankara Dahampasala</h1>
         </div>
-        <a href="index.html" style="color: white; text-decoration: none; font-weight: 600;">Main Page</a>
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
     </nav>
 
     <div class="main-container">
         <div class="card">
-            <h2 id="form-title" style="margin-top:0; font-size: 1.1rem;"><i class="fas fa-calendar-check"></i> Manage Activity Participation</h2>
+            <h2 id="form-title" style="margin-top:0; font-size: 1.1rem; color: var(--accent);">
+                <i class="fas fa-skating"></i> Manage Activity Participation
+            </h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+                Track student involvement in Dahampasala external events and calculate activity marks.
+            </p>
+            
             <form id="activityForm">
                 <div class="form-grid">
                     <div class="form-group full-width">
-                        <label>Student ID</label>
-                        <input type="text" id="studentId" class="input-field" placeholder="e.g. SVD/2026/050" required>
+                        <label>Student Admission Number</label>
+                        <input type="text" id="studentId" placeholder="e.g. SVD/2026/050" required>
                     </div>
                     
-                    <label class="checkbox-group"><input type="checkbox" id="katinaPerahara"> Katina Perahara</label>
-                    <label class="checkbox-group"><input type="checkbox" id="buddhaPooja"> Buddha Pooja</label>
-                    <label class="checkbox-group"><input type="checkbox" id="danaya"> Danaya</label>
-                    <label class="checkbox-group"><input type="checkbox" id="bakthiGeetha"> Bakthi Geetha</label>
-                    <label class="checkbox-group"><input type="checkbox" id="paaliDay"> Paali Day</label>
-                    <label class="checkbox-group"><input type="checkbox" id="englishDay"> English Day</label>
-                    <label class="checkbox-group"><input type="checkbox" id="concert"> Concert</label>
-                    
-                    <div class="form-group" style="grid-column: span 2;">
-                        <label>Marks (Double)</label>
-                        <input type="number" step="0.1" id="marks" class="input-field" placeholder="0.0">
+                    <div class="full-width">
+                        <label style="margin-bottom: 8px; display: block;">Participated Events</label>
+                        <div class="activity-checkbox-grid">
+                            <label class="checkbox-item"><input type="checkbox" id="katinaPerahara"> Katina Perahara</label>
+                            <label class="checkbox-item"><input type="checkbox" id="buddhaPooja"> Buddha Pooja</label>
+                            <label class="checkbox-item"><input type="checkbox" id="danaya"> Danaya</label>
+                            <label class="checkbox-item"><input type="checkbox" id="bakthiGeetha"> Bakthi Geetha</label>
+                            <label class="checkbox-item"><input type="checkbox" id="paaliDay"> Paali Day</label>
+                            <label class="checkbox-item"><input type="checkbox" id="englishDay"> English Day</label>
+                            <label class="checkbox-item"><input type="checkbox" id="concert"> Concert</label>
+                        </div>
                     </div>
 
-                    <div class="form-group full-width">
-                        <label>Other Activities / Remarks</label>
-                        <textarea id="other" class="input-field" rows="2" placeholder="List other activities..."></textarea>
+                    <div class="form-group">
+                        <label>Total Activity Marks</label>
+                        <input type="number" step="0.1" id="marks" placeholder="Final Score" min="0" max="100">
+                    </div>
+                    
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Special Remarks</label>
+                        <input type="text" id="other" placeholder="e.g. Won 1st place in Paali Recitation">
                     </div>
                 </div>
 
-                <div style="margin-top: 20px; display: flex; gap: 10px;">
-                    <button type="button" id="addBtn" onclick="saveActivity()" class="btn btn-save"><i class="fas fa-save"></i> Save Activity</button>
-                    <button type="button" id="updateBtn" onclick="updateActivity()" class="btn btn-update"><i class="fas fa-sync-alt"></i> Update Activity</button>
-                    <button type="reset" class="btn btn-outline" onclick="resetForm()">Clear</button>
+                <div style="margin-top: 25px; display: flex; gap: 12px;">
+                    <button type="button" id="addBtn" onclick="saveActivity()" class="btn btn-save">
+                        <i class="fas fa-save"></i> Save Activity
+                    </button>
+                    <button type="button" id="updateBtn" onclick="updateActivity()" class="btn btn-update">
+                        <i class="fas fa-sync-alt"></i> Update Record
+                    </button>
+                    <button type="reset" class="btn btn-outline" onclick="resetForm()">
+                        <i class="fas fa-times"></i> Clear
+                    </button>
                 </div>
             </form>
         </div>
 
         <div class="card">
-            <div style="margin-bottom: 20px;">
-                <input type="text" id="searchInput" class="input-field" placeholder="Search Student ID..." onkeyup="searchTable()">
+            <div class="toolbar">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search Student ID..." onkeyup="searchTable()">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Print Registry</button>
+                    <button class="btn btn-danger" onclick="bulkDelete()"><i class="fas fa-trash-alt"></i> Bulk Delete</button>
+                </div>
             </div>
-            <div style="overflow-x: auto;">
+
+            <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
+                            <th style="width: 40px;"><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
                             <th>Student ID</th>
                             <th>Katina</th>
                             <th>Pooja</th>
                             <th>Danaya</th>
                             <th>Bakthi</th>
-                            <th>Paali</th>
-                            <th>English</th>
-                            <th>Concert</th>
                             <th>Marks</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="activityTableBody"></tbody>
+                    <tbody id="activityTableBody">
+                        </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <script>
-        let activities = [];
-        let currentEditID = null;
-
-        function renderTable(data = activities) {
-            const body = document.getElementById('activityTableBody');
-            body.innerHTML = '';
-            data.forEach(a => {
-                body.innerHTML += `
-                    <tr>
-                        <td><strong>${a.studentId}</strong></td>
-                        <td>${badge(a.katinaPerahara)}</td>
-                        <td>${badge(a.buddhaPooja)}</td>
-                        <td>${badge(a.danaya)}</td>
-                        <td>${badge(a.bakthiGeetha)}</td>
-                        <td>${badge(a.paaliDay)}</td>
-                        <td>${badge(a.englishDay)}</td>
-                        <td>${badge(a.concert)}</td>
-                        <td><strong>${a.marks}</strong></td>
-                        <td>
-                            <button class="btn btn-outline" style="padding: 4px;" onclick="editActivity('${a.studentId}')"><i class="fas fa-edit" style="color:var(--info)"></i></button>
-                            <button class="btn btn-outline" style="padding: 4px;" onclick="deleteActivity('${a.studentId}')"><i class="fas fa-trash" style="color:var(--danger)"></i></button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function badge(v) { return v ? '<span class="status-badge status-true">YES</span>' : '<span class="status-badge status-false">NO</span>'; }
-
-        function saveActivity() {
-            const id = document.getElementById('studentId').value;
-            if(!id) return alert("ID Required");
-            activities.push(getFormData());
-            renderTable();
-            resetForm();
-        }
-
-        function editActivity(id) {
-            const a = activities.find(x => x.studentId === id);
-            currentEditID = id;
-            document.getElementById('studentId').value = a.studentId;
-            document.getElementById('studentId').disabled = true;
-            document.getElementById('marks').value = a.marks;
-            document.getElementById('other').value = a.other;
-            ["katinaPerahara", "buddhaPooja", "danaya", "bakthiGeetha", "paaliDay", "englishDay", "concert"].forEach(key => {
-                document.getElementById(key).checked = a[key];
-            });
-            document.getElementById('addBtn').style.display = 'none';
-            document.getElementById('updateBtn').style.display = 'inline-flex';
-        }
-
-        function updateActivity() {
-            const idx = activities.findIndex(x => x.studentId === currentEditID);
-            activities[idx] = getFormData();
-            renderTable();
-            resetForm();
-        }
-
-        function getFormData() {
-            return {
-                studentId: document.getElementById('studentId').value,
-                katinaPerahara: document.getElementById('katinaPerahara').checked,
-                buddhaPooja: document.getElementById('buddhaPooja').checked,
-                danaya: document.getElementById('danaya').checked,
-                bakthiGeetha: document.getElementById('bakthiGeetha').checked,
-                paaliDay: document.getElementById('paaliDay').checked,
-                englishDay: document.getElementById('englishDay').checked,
-                concert: document.getElementById('concert').checked,
-                marks: parseFloat(document.getElementById('marks').value) || 0,
-                other: document.getElementById('other').value
-            };
-        }
-
-        function deleteActivity(id) { if(confirm("Delete " + id + "?")) { activities = activities.filter(x => x.studentId !== id); renderTable(); } }
-
-        function searchTable() {
-            const q = document.getElementById('searchInput').value.toLowerCase();
-            renderTable(activities.filter(a => a.studentId.toLowerCase().includes(q)));
-        }
-
-        function resetForm() {
-            document.getElementById('activityForm').reset();
-            document.getElementById('studentId').disabled = false;
-            document.getElementById('addBtn').style.display = 'inline-flex';
-            document.getElementById('updateBtn').style.display = 'none';
-            currentEditID = null;
-        }
-    </script>
+    <script src="../js/externalActivities.js"></script>
 </body>
 </html>

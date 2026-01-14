@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import com.dhampasala.student.student_management.HibernateUtil;
 import com.dhampasala.student.student_management.model.entity.AccDetails;
 
-
+@Repository
 public class AccDetailsRepo {
       public void addAccDetails(AccDetails accDetails){
         Transaction tx=null;

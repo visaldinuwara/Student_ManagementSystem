@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rank & Responsibility | Sri Vinayalankara Dahampasala</title>
+    <link rel="stylesheet" href="../css/stylesForOther.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Specific styling for the responsibility checkboxes */
+        .responsibility-grid {
+            display: flex;
+            gap: 20px;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-top: 5px;
+        }
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .check-item input { width: auto; margin: 0; cursor: pointer; }
+        
+        .badge-rank {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .bg-gold { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <i class="fas fa-dharmachakra fa-2x" style="color: #f1c40f;"></i>
+            <h1 style="font-size: 1.2rem; margin: 0; letter-spacing: 0.5px;">Sri Vinayalankara Dahampasala</h1>
+        </div>
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </nav>
+
+    <div class="main-container">
+        
+        <div class="card">
+            <h2 id="form-title" style="margin-top:0; font-size: 1.1rem; color: var(--accent);">
+                <i class="fas fa-medal"></i> Student Rank & Responsibilities
+            </h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+                Assign leadership roles and record leadership marks for the current academic year.
+            </p>
+            
+            <form id="rankForm">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Student ID</label>
+                        <input type="text" id="studentId" placeholder="e.g. SVD/2026/001" required>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label>Active Responsibilities</label>
+                        <div class="responsibility-grid">
+                            <label class="check-item">
+                                <input type="checkbox" id="prefect"> Prefect Role
+                            </label>
+                            <label class="check-item">
+                                <input type="checkbox" id="classMonitor"> Class Monitor
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Leadership Marks</label>
+                        <input type="number" step="0.1" id="marks" placeholder="Marks /100">
+                    </div>
+
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Other Positions / Remarks</label>
+                        <input type="text" id="other" placeholder="e.g. Library Assistant, Sports Captain">
+                    </div>
+                </div>
+
+                <div style="margin-top: 25px; display: flex; gap: 12px;">
+                    <button type="button" id="addBtn" onclick="saveRank()" class="btn btn-save">
+                        <i class="fas fa-save"></i> Save Details
+                    </button>
+                    <button type="button" id="updateBtn" onclick="updateRank()" class="btn btn-update" style="display:none;">
+                        <i class="fas fa-sync-alt"></i> Update Record
+                    </button>
+                    <button type="reset" class="btn btn-outline" onclick="resetForm()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="toolbar">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search Student ID..." onkeyup="searchTable()">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Print Rank List</button>
+                    <button class="btn btn-danger" onclick="bulkDelete()"><i class="fas fa-trash-alt"></i> Bulk Delete</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
+                            <th>Student ID</th>
+                            <th>Prefect</th>
+                            <th>Monitor</th>
+                            <th>Leadership Marks</th>
+                            <th>Special Remarks</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/studentRank.js"></script>
+</body>
+</html>

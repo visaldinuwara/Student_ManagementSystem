@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import com.dhampasala.student.student_management.HibernateUtil;
 import com.dhampasala.student.student_management.model.entity.Colors;
-
+@Repository
 public class ColorsRepository {
       public void addColors(Colors colors){
         Transaction tx=null;

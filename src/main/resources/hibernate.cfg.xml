@@ -1,0 +1,30 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/studentdb</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">12344321</property>
+
+        <!-- Hibernate settings -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Mapping classes -->
+        <mapping class="entity.AccDetails"/>
+        <mapping class="entity.Colors"/>
+        <mapping class="entity.ExternalActivities"/>
+        <mapping class="entity.ExternalMarks"/>
+        <mapping class="entity.ParentObservation"/>
+        <mapping class="entity.PersonalInfo"/>
+        <mapping class="entity.Rank"/>
+        <mapping class="entity.SpecialProgrammes"/>
+        <mapping class="entity.StudentAttendence"/>
+        <mapping class="entity.StudentMarks"/>
+    </session-factory>
+</hibernate-configuration>

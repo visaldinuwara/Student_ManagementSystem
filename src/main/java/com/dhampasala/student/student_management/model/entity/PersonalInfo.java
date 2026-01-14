@@ -22,4 +22,11 @@ public class PersonalInfo {
     private Date birthDate;
     private Date addmissionDate;
     private int grade;
+    private String phoneNo;
+    private String whatsAppNo;
+    private String address;    
+    private String guardianName;
+    private String guardianNIC;
+    private String occupation;
+    private String futureGoal;
 }
