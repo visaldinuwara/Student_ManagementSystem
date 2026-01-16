@@ -1,8 +1,10 @@
 package com.dhampasala.student.student_management.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,7 @@ import com.dhampasala.student.student_management.model.dto.PersonalInfoDTO;
 import com.dhampasala.student.student_management.service.PersonalInfoService;
 @RestController
 @RequestMapping("/personalinfo")
+@CrossOrigin(origins = "*")
 public class PersonalInfoController {
               @Autowired
     private PersonalInfoService personalInfoService;
@@ -30,7 +33,7 @@ public class PersonalInfoController {
       personalInfoService.deletePersonalInfo(personalInfoDTO, studentId);
     }
     @GetMapping("/search/{studentId}")
-    public PersonalInfoDTO searchPersonalInfo(@PathVariable String studentId){
+    public Optional<PersonalInfoDTO> searchPersonalInfo(@PathVariable String studentId){
         return personalInfoService.searchPersonalInfo(studentId);
     }
     @GetMapping("/all")

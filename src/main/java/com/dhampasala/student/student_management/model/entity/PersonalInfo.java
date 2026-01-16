@@ -3,6 +3,7 @@ import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "`personal_info`")
 public class PersonalInfo {
       @Id
     private String studentId;

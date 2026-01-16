@@ -26,7 +26,7 @@ async function addStudent() {
         if (response.ok) {
             const result = await response.text();
             alert("Success: " + result);
-            resetForm(); // Clears the form after successful save
+            clearFields(); // Clears the form after successful save
         } else {
             const errorText = await response.text();
             alert("Server Error: " + errorText);

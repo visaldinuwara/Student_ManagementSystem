@@ -1,6 +1,6 @@
 async function saveStudentRecord() {
 const studentData = {
-        studentID: document.getElementById('studentID').value,
+        studentID: document.getElementById('studentId').value,
         firstTerm: parseFloat(document.getElementById('firstTerm').value) || 0.0,
         secondTerm: parseFloat(document.getElementById('secondTerm').value) || 0.0,
         thirdTerm: parseFloat(document.getElementById('thirdTerm').value) || 0.0,
@@ -13,7 +13,7 @@ const studentData = {
         rankEnglishMediumExam: parseInt(document.getElementById('rankEnglishMediumExam').value) || 0
     };
 try {
-        const response = await fetch('http://localhost:8080/api/students/save', {
+        const response = await fetch('http://localhost:8080/externelactivity/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json' // Crucial: Tells Java to expect JSON

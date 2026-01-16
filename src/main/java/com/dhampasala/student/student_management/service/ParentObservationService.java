@@ -2,6 +2,7 @@ package com.dhampasala.student.student_management.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,20 +15,19 @@ public class ParentObservationService {
           @Autowired
     private ParentObservationRepo parentObservationRepo;
     public void addParentObservation(ParentObservationDTO parentObservationDTO){
-        parentObservationRepo.addParentObservation(new ParentObservation(parentObservationDTO.getStudentId(),parentObservationDTO.getFirstTerm(),parentObservationDTO.getSecondTerm(),parentObservationDTO.getThirdTerm()));
+        parentObservationRepo.save(new ParentObservation(parentObservationDTO.getStudentId(),parentObservationDTO.getFirstTerm(),parentObservationDTO.getSecondTerm(),parentObservationDTO.getThirdTerm()));
     }
     public void updateParentObservation(ParentObservationDTO parentObservationDTO) {
-        parentObservationRepo.updateParentObservation(new ParentObservation(parentObservationDTO.getStudentId(),parentObservationDTO.getFirstTerm(),parentObservationDTO.getSecondTerm(),parentObservationDTO.getThirdTerm()));
+        parentObservationRepo.save(new ParentObservation(parentObservationDTO.getStudentId(),parentObservationDTO.getFirstTerm(),parentObservationDTO.getSecondTerm(),parentObservationDTO.getThirdTerm()));
     }
     public void deleteParentObservation(ParentObservationDTO parentObservationDTO){
-        parentObservationRepo.deleteParentObservation(new ParentObservation(parentObservationDTO.getStudentId(),parentObservationDTO.getFirstTerm(),parentObservationDTO.getSecondTerm(),parentObservationDTO.getThirdTerm()));
+        parentObservationRepo.delete(new ParentObservation(parentObservationDTO.getStudentId(),parentObservationDTO.getFirstTerm(),parentObservationDTO.getSecondTerm(),parentObservationDTO.getThirdTerm()));
     }
-    public ParentObservationDTO searchParentObservation(String studentId){
-        ParentObservation parentObservation=parentObservationRepo.searchParentObservation(studentId);
-        return new ParentObservationDTO(parentObservation.getStudentId(),parentObservation.getFirstTerm(),parentObservation.getSecondTerm(),parentObservation.getThirdTerm());
+    public Optional<ParentObservationDTO> searchParentObservation(String studentId){
+        return parentObservationRepo.findById(studentId).map(dto -> new ParentObservationDTO(dto.getStudentId(),dto.getFirstTerm(),dto.getSecondTerm(),dto.getThirdTerm()));
     }
     public List<ParentObservationDTO> getAll(){
-        List<ParentObservation>parentObservationArray=parentObservationRepo.getAll();
+        List<ParentObservation>parentObservationArray=parentObservationRepo.findAll();
         List<ParentObservationDTO>parentObservationDTOArray=new ArrayList<>();
         for(ParentObservation parentObservation:parentObservationArray){
             parentObservationDTOArray.add(new ParentObservationDTO(parentObservation.getStudentId(),parentObservation.getFirstTerm(),parentObservation.getSecondTerm(),parentObservation.getThirdTerm()));

@@ -1,8 +1,10 @@
 package com.dhampasala.student.student_management.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +17,7 @@ import com.dhampasala.student.student_management.service.ParentObservationServic
 
 @RestController
 @RequestMapping("/ParentObservation")
+@CrossOrigin(origins = "*")
 public class ParentObservationController {
             @Autowired
     private ParentObservationService parentObservationService;
@@ -31,7 +34,7 @@ public class ParentObservationController {
         parentObservationService.deleteParentObservation(parentObservationDTO);
     }
     @GetMapping("/search/{studentId}")
-    public ParentObservationDTO searchParentObservation(@PathVariable String studentId){
+    public Optional<ParentObservationDTO> searchParentObservation(@PathVariable String studentId){
         return parentObservationService.searchParentObservation(studentId);    
     }
     @GetMapping("/all")

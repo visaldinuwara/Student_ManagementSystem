@@ -2,6 +2,7 @@ package com.dhampasala.student.student_management.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,20 +15,19 @@ public class RankService {
     @Autowired
     private RankRepo rankRepo;
     public void addRank(RankDTO rankDTO){
-        rankRepo.addRank(new Rank(rankDTO.getStudentId(),rankDTO.isPrefect(),rankDTO.isClassMonitor(),rankDTO.getOther(),rankDTO.getMarks()));
+        rankRepo.save(new Rank(rankDTO.getStudentId(),rankDTO.isPrefect(),rankDTO.isClassMonitor(),rankDTO.getOther(),rankDTO.getMarks()));
     }
     public void updateRank(RankDTO rankDTO) {
-        rankRepo.updateRank(new Rank(rankDTO.getStudentId(),rankDTO.isPrefect(),rankDTO.isClassMonitor(),rankDTO.getOther(),rankDTO.getMarks()));
+        rankRepo.save(new Rank(rankDTO.getStudentId(),rankDTO.isPrefect(),rankDTO.isClassMonitor(),rankDTO.getOther(),rankDTO.getMarks()));
     }
     public void deleteRank(RankDTO rankDTO){
-        rankRepo.deleteRank(new Rank(rankDTO.getStudentId(),rankDTO.isPrefect(),rankDTO.isClassMonitor(),rankDTO.getOther(),rankDTO.getMarks()));
+        rankRepo.delete(new Rank(rankDTO.getStudentId(),rankDTO.isPrefect(),rankDTO.isClassMonitor(),rankDTO.getOther(),rankDTO.getMarks()));
     }
-    public RankDTO searchRank(String studentId){
-        Rank rank=rankRepo.searchRank(studentId);
-        return new RankDTO(rank.getStudentId(),rank.isPrefect(),rank.isClassMonitor(),rank.getOther(),rank.getMarks());
+    public Optional<RankDTO> searchRank(String studentId){
+        return rankRepo.findById(studentId).map(dto -> new RankDTO(dto.getStudentId(),dto.isPrefect(),dto.isClassMonitor(),dto.getOther(),dto.getMarks()));
     }
     public List<RankDTO> getAll(){
-        List<Rank>rankArray=rankRepo.getAll();
+        List<Rank>rankArray=rankRepo.findAll();
         List<RankDTO>rankDTOArray=new ArrayList<>();
         for(Rank rank:rankArray){
             rankDTOArray.add(new RankDTO(rank.getStudentId(),rank.isPrefect(),rank.isClassMonitor(),rank.getOther(),rank.getMarks()));

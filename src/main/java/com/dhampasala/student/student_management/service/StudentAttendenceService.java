@@ -2,6 +2,7 @@ package com.dhampasala.student.student_management.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,20 +15,19 @@ public class StudentAttendenceService {
         @Autowired
     private StudentAttendenceRepo studentAttendenceRepo;
     public void addStudentAttendance(StudentAttendenceDTO studentAttendenceDTO){
-        studentAttendenceRepo.addStudentAttendance(new StudentAttendence(studentAttendenceDTO.getStudentId(),studentAttendenceDTO.getYear(),studentAttendenceDTO.getMonth(),studentAttendenceDTO.getDaysPresent()));
+        studentAttendenceRepo.save(new StudentAttendence(studentAttendenceDTO.getStudentId(),studentAttendenceDTO.getYear(),studentAttendenceDTO.getMonth(),studentAttendenceDTO.getDaysPresent()));
     }
     public void updateStudentAttendance(StudentAttendenceDTO studentAttendenceDTO) {
-        studentAttendenceRepo.updateStudentAttendance(new StudentAttendence(studentAttendenceDTO.getStudentId(),studentAttendenceDTO.getYear(),studentAttendenceDTO.getMonth(),studentAttendenceDTO.getDaysPresent()));
+        studentAttendenceRepo.save(new StudentAttendence(studentAttendenceDTO.getStudentId(),studentAttendenceDTO.getYear(),studentAttendenceDTO.getMonth(),studentAttendenceDTO.getDaysPresent()));
     }
     public void deleteStudentAttendance(StudentAttendenceDTO studentAttendenceDTO){
-        studentAttendenceRepo.deleteStudentAttendance(new StudentAttendence(studentAttendenceDTO.getStudentId(),studentAttendenceDTO.getYear(),studentAttendenceDTO.getMonth(),studentAttendenceDTO.getDaysPresent()));
+        studentAttendenceRepo.delete(new StudentAttendence(studentAttendenceDTO.getStudentId(),studentAttendenceDTO.getYear(),studentAttendenceDTO.getMonth(),studentAttendenceDTO.getDaysPresent()));
     }
-    public StudentAttendenceDTO searchStudentAttendance(String studentId){
-        StudentAttendence studentAttendence=studentAttendenceRepo.searchStudentAttendance(studentId);
-        return new StudentAttendenceDTO(studentAttendence.getStudentId(),studentAttendence.getYear(),studentAttendence.getMonth(),studentAttendence.getDaysPresent());
+    public Optional<StudentAttendenceDTO> searchStudentAttendance(String studentId){
+        return studentAttendenceRepo.findById(studentId).map(dto -> new StudentAttendenceDTO(dto.getStudentId(),dto.getYear(),dto.getMonth(),dto.getDaysPresent()));
     }
     public List<StudentAttendenceDTO> getAll(){
-        List<StudentAttendence> studentAttendenceArray=studentAttendenceRepo.getAll();
+        List<StudentAttendence> studentAttendenceArray=studentAttendenceRepo.findAll();
         List<StudentAttendenceDTO> studentAttendenceDTOArray=new ArrayList<>();
         for(StudentAttendence studentAttendence:studentAttendenceArray){
             studentAttendenceDTOArray.add(new StudentAttendenceDTO(studentAttendence.getStudentId(),studentAttendence.getYear(),studentAttendence.getMonth(),studentAttendence.getDaysPresent()));

@@ -1,8 +1,10 @@
 package com.dhampasala.student.student_management.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,27 +16,28 @@ import com.dhampasala.student.student_management.model.dto.RankDTO;
 import com.dhampasala.student.student_management.service.RankService;
 @RestController
 @RequestMapping("/rank")
+@CrossOrigin(origins = "*")
 public class RankController {
       @Autowired
     private RankService rankService;
     @PostMapping("/save")
-    private void addRank(@RequestBody RankDTO rankDTO){
+    public void addRank(@RequestBody RankDTO rankDTO){
       rankService.addRank(rankDTO);
     }
     @PostMapping("/update")
-    private void updateRank(@RequestBody RankDTO rankDTO) {
+    public void updateRank(@RequestBody RankDTO rankDTO) {
       rankService.updateRank(rankDTO);
     }
     @PostMapping("/delete")
-    private void deleteRank(@RequestBody RankDTO rankDTO){
+    public void deleteRank(@RequestBody RankDTO rankDTO){
       rankService.deleteRank(rankDTO);
     }
     @GetMapping("/search/{studentId}")
-    private RankDTO searchRank(@PathVariable String studentId){
+    public Optional<RankDTO> searchRank(@PathVariable String studentId){
         return rankService.searchRank(studentId);
     }
     @GetMapping("/all")
-    private List<RankDTO> getAll(){
+    public List<RankDTO> getAll(){
         return rankService.getAll();
     }
 }
