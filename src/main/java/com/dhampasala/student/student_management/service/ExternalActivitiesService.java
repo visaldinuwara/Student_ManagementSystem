@@ -20,8 +20,8 @@ public class ExternalActivitiesService {
     public void updateExternalActivity(ExternalActivitiesDTO externalActivitiesDTO) {
         externalActivitiesRepo.save(new ExternalActivities(externalActivitiesDTO.getStudentId(),externalActivitiesDTO.isKatinaPerahara(),externalActivitiesDTO.isBuddhaPooja(),externalActivitiesDTO.isDanaya(),externalActivitiesDTO.isBakthiGeetha(),externalActivitiesDTO.isPaaliDay(),externalActivitiesDTO.isEnglishDay(),externalActivitiesDTO.isConcert(),externalActivitiesDTO.getOther(),externalActivitiesDTO.getMarks()));
     }
-    public void deleteExternalActivity(ExternalActivitiesDTO externalActivitiesDTO){
-        externalActivitiesRepo.delete(new ExternalActivities(externalActivitiesDTO.getStudentId(),externalActivitiesDTO.isKatinaPerahara(),externalActivitiesDTO.isBuddhaPooja(),externalActivitiesDTO.isDanaya(),externalActivitiesDTO.isBakthiGeetha(),externalActivitiesDTO.isPaaliDay(),externalActivitiesDTO.isEnglishDay(),externalActivitiesDTO.isConcert(),externalActivitiesDTO.getOther(),externalActivitiesDTO.getMarks()));
+    public void deleteExternalActivity(String studentId){
+        externalActivitiesRepo.deleteById(studentId);
     }
     public Optional<ExternalActivitiesDTO> searchExternalActivity(String studentId){
         return externalActivitiesRepo.findById(studentId).map(dto -> new ExternalActivitiesDTO(

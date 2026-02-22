@@ -3,10 +3,55 @@ const API_URL = "http://localhost:8080/studentattendence";
 // 1. Initialize Page
 document.addEventListener('DOMContentLoaded', () => {
     loadAttendanceRecords();
-    document.getElementById('updateBtn').style.display = 'none';
+    const updateBtn = document.getElementById('updateBtn');
+    if (updateBtn) updateBtn.style.display = 'none';
 });
 
-// 2. Fetch all records from Java Backend
+/**
+ * BULK OPERATIONS
+ */
+function toggleAll(source) {
+    const checkboxes = document.querySelectorAll('.record-checkbox');
+    checkboxes.forEach(cb => cb.checked = source.checked);
+}
+
+async function bulkDelete() {
+    const selectedCheckboxes = document.querySelectorAll('.record-checkbox:checked');
+    const idsToDelete = Array.from(selectedCheckboxes).map(cb => cb.value);
+
+    if (idsToDelete.length === 0) {
+        return alert("Please select at least one record to delete.");
+    }
+
+    if (confirm(`Are you sure you want to permanently delete ${idsToDelete.length} records?`)) {
+        try {
+            const response = await fetch(`${API_URL}/bulk-delete`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(idsToDelete)
+            });
+
+            if (response.ok) {
+                alert("Selected records deleted successfully!");
+                loadAttendanceRecords();
+                const selectAll = document.getElementById('selectAll');
+                if (selectAll) selectAll.checked = false;
+            } else {
+                const errorMsg = await response.text();
+                alert("Failed to delete records: " + errorMsg);
+            }
+        } catch (error) {
+            console.error("Bulk Delete error:", error);
+            alert("Network error.");
+        }
+    }
+}
+
+/**
+ * CORE CRUD OPERATIONS
+ */
+
+// Fetch all records
 async function loadAttendanceRecords() {
     try {
         const response = await fetch(`${API_URL}/all`);
@@ -19,22 +64,23 @@ async function loadAttendanceRecords() {
     }
 }
 
-// 3. Render Table Rows
+// Render Table Rows
 function renderTable(records) {
     const tableBody = document.getElementById('dataTableBody');
+    if (!tableBody) return;
+    
     tableBody.innerHTML = '';
 
     records.forEach(record => {
-        // Simple logic for attendance status badge
         const days = record.daysPresent || 0;
         let statusBadge = '';
         
         if (days >= 4) {
-            statusBadge = '<span style="background: #c6f6d5; color: #22543d; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">EXCELLENT</span>';
+            statusBadge = '<span style="color: #27ae60; font-weight: bold;"><i class="fas fa-star"></i> EXCELLENT</span>';
         } else if (days >= 2) {
-            statusBadge = '<span style="background: #feebc8; color: #744210; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">AVERAGE</span>';
+            statusBadge = '<span style="color: #f39c12; font-weight: bold;"><i class="fas fa-check"></i> AVERAGE</span>';
         } else {
-            statusBadge = '<span style="background: #fed7d7; color: #822727; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">LOW</span>';
+            statusBadge = '<span style="color: #e74c3c; font-weight: bold;"><i class="fas fa-exclamation-triangle"></i> LOW</span>';
         }
 
         const row = document.createElement('tr');
@@ -43,13 +89,13 @@ function renderTable(records) {
             <td style="font-weight:600;">${record.studentId}</td>
             <td>${record.year}</td>
             <td>${record.month}</td>
-            <td>${days} days</td>
+            <td><strong>${days}</strong> days</td>
             <td>${statusBadge}</td>
             <td>
-                <button class="btn btn-outline" style="padding:4px 8px;" onclick="editAttendance('${record.studentId}')">
+                <button class="btn btn-outline" onclick="editAttendance('${record.studentId}')" title="Edit" style="padding:4px 8px; margin-right:5px;">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-outline" style="padding:4px 8px; color:red;" onclick="deleteSingle('${record.studentId}')">
+                <button class="btn btn-outline" onclick="deleteSingle('${record.studentId}')" title="Delete" style="padding:4px 8px; color:#e74c3c;">
                     <i class="fas fa-trash"></i>
                 </button>
             </td>
@@ -58,13 +104,58 @@ function renderTable(records) {
     });
 }
 
-// 4. Save Record (POST) - Remember @RequestBody in Java
+/**
+ * Single delete function using POST with PathVariable
+ * Targets: @PostMapping("/delete/{studentId}")
+ */
+// 6. Delete Single Record (Selected from Table)
+async function deleteSingle() {
+    // Look for the first checked checkbox in the table body
+    const selectedCheckbox = document.querySelector('.record-checkbox:checked');
+
+    if (!selectedCheckbox) {
+        return alert("Please select a record from the table first.");
+    }
+
+    const id = selectedCheckbox.value; // This is the studentId from the checkbox value
+
+    if (confirm(`Are you sure you want to delete observation for ${id}?`)) {
+        try {
+            const response = await fetch(`${API_URL}/delete/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ studentId: id }) 
+            });
+
+            if (response.ok) {
+                alert("Deleted successfully.");
+                loadAttendanceRecords();
+                // Clear form if we happened to be editing that student
+                if(document.getElementById('studentId').value === id) resetForm();
+            } else {
+                alert("Could not delete record.");
+            }
+        } catch (error) {
+            console.error("Delete failed:", error);
+        }
+    }
+}
+
+// Helper to clean up UI after delete
+function handleDeleteSuccess(id) {
+    alert("Record deleted successfully.");
+    if (document.getElementById('studentId').value === id) {
+        resetForm();
+    }
+    loadAttendanceRecords();
+}
+
+// Save Record
 async function saveAttendance() {
     const studentId = document.getElementById('studentId').value;
     if (!studentId) return alert("Student ID is required");
 
     const data = collectFormData();
-
     try {
         const response = await fetch(`${API_URL}/save`, {
             method: 'POST',
@@ -73,29 +164,27 @@ async function saveAttendance() {
         });
 
         if (response.ok) {
-            alert("Attendance logged successfully!");
             resetForm();
             loadAttendanceRecords();
+        } else {
+            alert("Error: Record might already exist.");
         }
     } catch (error) {
-        alert("Error saving attendance.");
+        alert("Error connecting to server.");
     }
 }
 
-// 5. Update Record (PUT) - Remember @RequestBody in Java
+// Update Record
 async function updateAttendance() {
-    const studentId = document.getElementById('studentId').value;
     const data = collectFormData();
-
     try {
         const response = await fetch(`${API_URL}/update`, {
-            method: 'POST',
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
 
         if (response.ok) {
-            alert("Attendance updated!");
             resetForm();
             loadAttendanceRecords();
         }
@@ -104,7 +193,9 @@ async function updateAttendance() {
     }
 }
 
-// 6. Helper: Collect Data from UI
+/**
+ * HELPERS
+ */
 function collectFormData() {
     return {
         studentId: document.getElementById('studentId').value,
@@ -114,51 +205,27 @@ function collectFormData() {
     };
 }
 
-// 7. Edit Mode: Load data back into form
 async function editAttendance(id) {
     try {
         const response = await fetch(`${API_URL}/search/${id}`);
         if (response.ok) {
             const r = await response.json();
-            
             document.getElementById('studentId').value = r.studentId;
             document.getElementById('year').value = r.year;
             document.getElementById('month').value = r.month;
             document.getElementById('daysPresent').value = r.daysPresent;
 
-            // UI Changes
             document.getElementById('studentId').readOnly = true;
             document.getElementById('addBtn').style.display = 'none';
             document.getElementById('updateBtn').style.display = 'inline-block';
             document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Attendance Record';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     } catch (error) {
-        console.error("Fetch error");
+        console.error("Fetch error:", error);
     }
 }
 
-// 8. Delete Single (Using POST with Body as you requested previously)
-async function deleteSingle(id) {
-    const data = collectFormData();
-    data.studentId = id; // Ensure the ID is correctly set in the object
-
-    if (confirm(`Remove attendance record for ${id}?`)) {
-        try {
-            const response = await fetch(`${API_URL}/delete`, { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            if (response.ok) {
-                loadAttendanceRecords();
-            }
-        } catch (error) {
-            alert("Delete failed.");
-        }
-    }
-}
-
-// 9. Utility: Search Table
 function searchTable() {
     const input = document.getElementById("searchInput").value.toLowerCase();
     const rows = document.querySelectorAll("#dataTableBody tr");
@@ -167,17 +234,12 @@ function searchTable() {
     });
 }
 
-// 10. Utility: Reset Form
 function resetForm() {
-    document.getElementById('attendanceForm').reset();
+    const form = document.getElementById('attendanceForm');
+    if (form) form.reset();
     document.getElementById('studentId').readOnly = false;
     document.getElementById('addBtn').style.display = 'inline-block';
     document.getElementById('updateBtn').style.display = 'none';
     document.getElementById('form-title').innerHTML = '<i class="fas fa-calendar-check"></i> Monthly Attendance Entry';
-}
-
-// 11. Bulk Checkbox Selection
-function toggleAll(source) {
-    const checkboxes = document.querySelectorAll('.record-checkbox');
-    checkboxes.forEach(cb => cb.checked = source.checked);
+    document.getElementById('year').value = "2026";
 }

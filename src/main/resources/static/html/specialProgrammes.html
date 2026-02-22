@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Rank & Leadership | Sri Vinayalankara Dahampasala</title>
+    <title>Special Programmes | Sri Vinayalankara Dahampasala</title>
     <link rel="stylesheet" href="../css/stylesForOther.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -23,42 +23,54 @@
         
         <div class="card">
             <h2 id="form-title" style="margin-top:0; font-size: 1.1rem; color: var(--accent);">
-                <i class="fas fa-medal"></i> Leadership & Rank Entry
+                <i class="fas fa-star"></i> Special Programme Records
             </h2>
-            <form id="rankForm">
+            <form id="programmeForm">
                 <div class="form-grid">
-                    <div class="form-group full-width">
+                    <div class="form-group">
                         <label>Student ID</label>
-                        <input type="text" id="studentId" placeholder="e.g. SVD/2026/001" required>
-                    </div>
-                    
-                    <label class="checkbox-group">
-                        <input type="checkbox" id="prefect"> <i class="fas fa-user-shield" style="color:var(--info)"></i> Prefect
-                    </label>
-                    <label class="checkbox-group">
-                        <input type="checkbox" id="classMonitor"> <i class="fas fa-chalkboard-teacher" style="color:var(--success)"></i> Class Monitor
-                    </label>
-                    
-                    <div class="form-group" style="grid-column: span 1;">
-                        <label>Total Rank Marks</label>
-                        <input type="number" step="0.01" id="marks" placeholder="0.00">
+                        <input type="text" id="studentID" placeholder="e.g. SVD/2026/001" required>
                     </div>
 
-                    <div class="form-group full-width">
-                        <label>Other Leadership Roles / Awards</label>
-                        <textarea id="other" rows="2" placeholder="e.g. Society President, Sports Meet Winner..."></textarea>
+                    <div class="form-group">
+                        <label>Programme Name</label>
+                        <input type="text" id="programmeName" placeholder="e.g. Dhamma School Competition" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Month</label>
+                        <select id="month" required style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                            <option value="">Select Month</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Marks / Score</label>
+                        <input type="number" step="0.1" id="marks" placeholder="0.0" min="0" max="100">
                     </div>
                 </div>
 
                 <div style="margin-top: 25px; display: flex; gap: 12px;">
-                    <button type="button" id="addBtn" onclick="saveRank()" class="btn btn-save">
-                        <i class="fas fa-plus"></i> Save Rank Data
+                    <button type="button" onclick="saveProgramme()" class="btn btn-save">
+                        <i class="fas fa-plus-circle"></i> Add Record
                     </button>
-                    <button type="button" id="updateBtn" onclick="updateRank()" class="btn btn-update">
-                        <i class="fas fa-sync-alt"></i> Update Record
+                    <button type="button" onclick="updateProgramme()" class="btn btn-update">
+                        <i class="fas fa-sync-alt"></i> Update
                     </button>
-                    <button type="reset" class="btn btn-outline" onclick="resetForm()">
-                        <i class="fas fa-times"></i> Cancel
+                    <button type="reset" class="btn btn-outline">
+                        <i class="fas fa-redo"></i> Reset
                     </button>
                 </div>
             </form>
@@ -68,11 +80,11 @@
             <div class="toolbar">
                 <div class="search-container">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Quick search Student ID..." onkeyup="searchTable()">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search by Student or Programme..." onkeyup="searchTable()">
                 </div>
                 <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Print Rankings</button>
-                    <button class="btn btn-danger" onclick="bulkDelete()"><i class="fas fa-trash-alt"></i> Delete Selected</button>
+                    <button class="btn btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Print Report</button>
+                    <button class="btn btn-danger" onclick="deleteSingle()"><i class="fas fa-trash-alt"></i> Delete Selected</button>
                 </div>
             </div>
 
@@ -82,18 +94,18 @@
                         <tr>
                             <th style="width: 40px;"><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
                             <th>Student ID</th>
-                            <th>Prefect</th>
-                            <th>Monitor</th>
-                            <th>Final Marks</th>
-                            <th>Other Achievements</th>
+                            <th>Programme Name</th>
+                            <th>Month</th>
+                            <th>Marks</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="dataTableBody">
+                    <tbody id="programmeTableBody">
                         </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <script src="../js/specialProgrammes.js"></script>
 </body>
 </html>

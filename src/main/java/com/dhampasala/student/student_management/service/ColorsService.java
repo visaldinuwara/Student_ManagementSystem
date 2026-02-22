@@ -15,32 +15,32 @@ public class ColorsService {
       @Autowired
     private ColorsRepository colorsRepo;
     public void addColors(ColorsDTO colorsDTO){
-        colorsRepo.save(new Colors(colorsDTO.getStudentID(),colorsDTO.getDinisuru(),colorsDTO.getRansilu(),colorsDTO.getPraknapradeepa(),colorsDTO.getSisumini(),colorsDTO.getSvarnavarna(),colorsDTO.getSvarnabushana()));
+        colorsRepo.save(new Colors(colorsDTO.getStudentID(),colorsDTO.isDinisuru(),colorsDTO.isRansilu(),colorsDTO.isPraknapradeepa(),colorsDTO.isSisumini(),colorsDTO.isSvarnavarna(),colorsDTO.isSvarnabushana(),colorsDTO.getTotalMarks()));
     }
     public void updateColors(ColorsDTO colorsDTO){
-        colorsRepo.save(new Colors(colorsDTO.getStudentID(),colorsDTO.getDinisuru(),colorsDTO.getRansilu(),colorsDTO.getPraknapradeepa(),colorsDTO.getSisumini(),colorsDTO.getSvarnavarna(),colorsDTO.getSvarnabushana()));
+        colorsRepo.save(new Colors(colorsDTO.getStudentID(),colorsDTO.isDinisuru(),colorsDTO.isRansilu(),colorsDTO.isPraknapradeepa(),colorsDTO.isSisumini(),colorsDTO.isSvarnavarna(),colorsDTO.isSvarnabushana(),colorsDTO.getTotalMarks()));
     }
-    public void deleteColors(ColorsDTO colorsDTO){
-        colorsRepo.delete(new Colors(colorsDTO.getStudentID(),colorsDTO.getDinisuru(),colorsDTO.getRansilu(),colorsDTO.getPraknapradeepa(),colorsDTO.getSisumini(),colorsDTO.getSvarnavarna(),colorsDTO.getSvarnabushana()));
-
+    public void deleteColors(String studentId){
+        colorsRepo.deleteById(studentId);
     }
     public Optional<ColorsDTO> searchColors(String studentId){
     return colorsRepo.findById(studentId)
             .map(dto -> new ColorsDTO(
                 dto.getStudentID(),
-                dto.getDinisuru(),
-                dto.getRansilu(),
-                dto.getPraknapradeepa(),
-                dto.getSisumini(),
-                dto.getSvarnavarna(),
-                dto.getSvarnabushana()
+                dto.isDinisuru(),
+                dto.isRansilu(),
+                dto.isPraknapradeepa(),
+                dto.isSisumini(),
+                dto.isSvarnavarna(),
+                dto.isSvarnabushana(),
+                dto.getTotalMarks()
             ));
 }        
     public List<ColorsDTO> getAll(){
         List<ColorsDTO> colorDtoArray=new ArrayList<>();
         List<Colors> colorArray=colorsRepo.findAll();
         for(Colors colors:colorArray){
-            colorDtoArray.add(new ColorsDTO(colors.getStudentID(),colors.getDinisuru(),colors.getRansilu(),colors.getPraknapradeepa(),colors.getSisumini(),colors.getSvarnavarna(),colors.getSvarnabushana()));
+            colorDtoArray.add(new ColorsDTO(colors.getStudentID(),colors.isDinisuru(),colors.isRansilu(),colors.isPraknapradeepa(),colors.isSisumini(),colors.isSvarnavarna(),colors.isSvarnabushana(),colors.getTotalMarks()));
         }
         return colorDtoArray;
     }

@@ -22,15 +22,16 @@ public class ColorsController {
     private ColorsService colorsService;
     @PostMapping("/save")
     public void addColors(@RequestBody ColorsDTO colorsDTO){
+      System.out.println("Received ColorsDTO: " + colorsDTO);
       colorsService.addColors(colorsDTO);
     }
     @PostMapping("/update")
     public void updateColors(@RequestBody ColorsDTO colorsDTO){
       colorsService.updateColors(colorsDTO);
     }
-    @PostMapping("/delete")
-    public void deleteColors(@RequestBody ColorsDTO colorsDTO){
-      colorsService.deleteColors(colorsDTO);
+    @PostMapping("/delete/{studentId}")
+    public void deleteColors(@PathVariable String studentId){
+      colorsService.deleteColors(studentId);
     }
     @GetMapping("/search/{studentId}")
     public Optional<ColorsDTO> searchColors(@PathVariable String studentId){

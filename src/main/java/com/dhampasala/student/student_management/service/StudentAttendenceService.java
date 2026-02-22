@@ -20,8 +20,8 @@ public class StudentAttendenceService {
     public void updateStudentAttendance(StudentAttendenceDTO studentAttendenceDTO) {
         studentAttendenceRepo.save(new StudentAttendence(studentAttendenceDTO.getStudentId(),studentAttendenceDTO.getYear(),studentAttendenceDTO.getMonth(),studentAttendenceDTO.getDaysPresent()));
     }
-    public void deleteStudentAttendance(StudentAttendenceDTO studentAttendenceDTO){
-        studentAttendenceRepo.delete(new StudentAttendence(studentAttendenceDTO.getStudentId(),studentAttendenceDTO.getYear(),studentAttendenceDTO.getMonth(),studentAttendenceDTO.getDaysPresent()));
+    public void deleteStudentAttendance(String studentId) {
+        studentAttendenceRepo.deleteById(studentId);
     }
     public Optional<StudentAttendenceDTO> searchStudentAttendance(String studentId){
         return studentAttendenceRepo.findById(studentId).map(dto -> new StudentAttendenceDTO(dto.getStudentId(),dto.getYear(),dto.getMonth(),dto.getDaysPresent()));

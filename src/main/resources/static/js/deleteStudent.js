@@ -50,51 +50,35 @@ async function findStudentToDelete() {
  * Collects all data and sends a POST request with 'id' in URL and DTO in body.
  */
 async function deleteStudentRecord() {
-    // 1. Safety Check: Is there a student name on the screen?
+    // 1. Safety Check: Ensure the user has actually searched for a student
+    const studentIdForPath = document.getElementById("deleteSearchInput").value;
     const loadedName = document.getElementById('viewName').value;
-    if (!loadedName) {
+
+    if (!studentIdForPath || !loadedName) {
         alert("Please find a student record first before trying to delete.");
         return;
     }
 
-    // 2. Identify the student from the search input (for the PathVariable)
-    const studentIdForPath = document.getElementById("deleteSearchInput").value;
-
-    // 3. Final Confirmation
-    if (confirm(`CRITICAL: Are you sure you want to permanently delete ${loadedName}?`)) {
+    // 2. Final Confirmation
+    if (confirm(`CRITICAL: Are you sure you want to permanently delete ${loadedName} (ID: ${studentIdForPath})?`)) {
         try {
-            const formData = new URLSearchParams();
-            const getValue = (htmlId) => document.getElementById(htmlId).value || "";
-
-            // Pack the DTO
-            formData.append('fullName', getValue('viewName'));
-            formData.append('birthDate', getValue('viewBirthDate'));
-            formData.append('addmissionDate', getValue('viewAdmissionDate'));
-            formData.append('grade', getValue('viewGrade'));
-            formData.append('phoneNo', getValue('viewPhone'));
-            formData.append('whatsAppNo', getValue('viewWhatsAppNo'));
-            formData.append('address', getValue('viewAddress'));
-            formData.append('guardianName', getValue('viewGuardianName'));
-            formData.append('guardianNIC', getValue('viewGuardianNIC'));
-            formData.append('occupation', getValue('viewOccupation'));
-            formData.append('futureGoal', getValue('viewFutureGoal'));
-
-            // 4. Send the request
+            // 3. Send the request using the DELETE method
+            // We do NOT send a body or Content-Type because the ID is in the URL
             const response = await fetch(`http://localhost:8080/personalinfo/delete/${studentIdForPath}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                method: 'DELETE' 
             });
 
+            // 4. Handle the Response
             if (response.ok) {
                 alert("The student record has been successfully deleted.");
                 window.location.reload(); 
             } else {
-                alert("The server could not delete the record. Please check the ID.");
+                const errorMsg = await response.text();
+                alert("Server Error: " + errorMsg);
             }
         } catch (error) {
             console.error("Network Error:", error);
-            alert("Could not connect to the server.");
+            alert("Could not connect to the server. Is the backend running?");
         }
     }
 }

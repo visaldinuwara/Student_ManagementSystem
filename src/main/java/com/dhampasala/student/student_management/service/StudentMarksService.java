@@ -34,4 +34,9 @@ public class StudentMarksService {
         }
         return studentMarksDTOArray;
     }
+      public void deleteMultipleRecords(List<String> studentIds) {
+        if (studentIds != null && !studentIds.isEmpty()) {
+            studentMarksRepo.deleteAllById(studentIds);
+        }
+    }
 }

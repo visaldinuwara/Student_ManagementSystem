@@ -10,7 +10,8 @@ async function addStudent() {
   guardianName: document.getElementById("guardianName").value,
   guardianNIC: document.getElementById("guardianNIC").value,
   occupation: document.getElementById("occupation").value,
-  futureGoal: document.getElementById("futureGoal").value
+  futureGoal: document.getElementById("futureGoal").value,
+    medium:document.getElementById("sinhalaMedium").checked
 };
     console.log(student);
     try {
@@ -25,7 +26,7 @@ async function addStudent() {
         // 3. Handle the Response from the Controller
         if (response.ok) {
             const result = await response.text();
-            alert("Success: " + result);
+            alert("Student added Successfully");
             clearFields(); // Clears the form after successful save
         } else {
             const errorText = await response.text();

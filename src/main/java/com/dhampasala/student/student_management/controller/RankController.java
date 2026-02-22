@@ -28,15 +28,15 @@ public class RankController {
     public void updateRank(@RequestBody RankDTO rankDTO) {
       rankService.updateRank(rankDTO);
     }
-    @PostMapping("/delete")
-    public void deleteRank(@RequestBody RankDTO rankDTO){
-      rankService.deleteRank(rankDTO);
+    @PostMapping("/delete/{StudentID}")
+    public void deleteRank(@PathVariable String StudentID){
+      rankService.deleteRank(StudentID);
     }
     @GetMapping("/search/{studentId}")
     public Optional<RankDTO> searchRank(@PathVariable String studentId){
         return rankService.searchRank(studentId);
     }
-    @GetMapping("/all")
+    @GetMapping("/getAll")
     public List<RankDTO> getAll(){
         return rankService.getAll();
     }

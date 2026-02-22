@@ -18,10 +18,11 @@ import lombok.ToString;
 public class Colors {
       @Id
     private String studentID;
-    private double dinisuru;
-    private double ransilu;
-    private double praknapradeepa;
-    private double sisumini;
-    private double svarnavarna;
-    private double svarnabushana;
+    private boolean dinisuru;
+    private boolean ransilu;
+    private boolean praknapradeepa;
+    private boolean sisumini;
+    private boolean svarnavarna;
+    private boolean svarnabushana;
+    private double totalMarks;
 }

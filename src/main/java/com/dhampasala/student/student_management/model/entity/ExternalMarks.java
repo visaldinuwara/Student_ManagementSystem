@@ -16,7 +16,8 @@ import lombok.ToString;
 @Entity
 @Table(name = "`external_marks`")
 public class ExternalMarks {
-      @Id
+    
+    @Id
     private String studentId;
     private double firstTerm;
     private double secondTerm;

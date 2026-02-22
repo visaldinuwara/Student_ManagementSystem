@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,13 +25,13 @@ public class ExternelActivityController {
     public void addExternalActivity(@RequestBody ExternalActivitiesDTO externalActivitiesDTO){
       externalActivitiesService.addExternalActivity(externalActivitiesDTO);
     }
-    @PostMapping("/update")
+    @PutMapping("/update")
     public void updateExternalActivity(@RequestBody ExternalActivitiesDTO externalActivitiesDTO) {
       externalActivitiesService.updateExternalActivity(externalActivitiesDTO);
     }
-    @PostMapping("/delete")
-    public void deleteExternalActivity(@RequestBody ExternalActivitiesDTO externalActivitiesDTO){
-      externalActivitiesService.deleteExternalActivity(externalActivitiesDTO);
+    @PutMapping("/delete/{studentId}")
+    public void deleteExternalActivity(@PathVariable String studentId){
+      externalActivitiesService.deleteExternalActivity(studentId);
     }
     @GetMapping("/search/{studentId}")
     public Optional<ExternalActivitiesDTO> searchExternalActivity(@PathVariable String studentId){

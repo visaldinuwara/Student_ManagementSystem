@@ -20,7 +20,7 @@ import com.dhampasala.student.student_management.service.SpecialProgrammesServic
 public class SpecialProgrammesController {
   @Autowired
     private SpecialProgrammesService specialProgrammesService;
-    @PostMapping("/add")
+    @PostMapping("/save")
     public void addSpecialProgramme(@RequestBody SpecialProgrammesDTO specialProgrammesDTO){
         specialProgrammesService.addSpecialProgramme(specialProgrammesDTO);
     }
@@ -28,9 +28,9 @@ public class SpecialProgrammesController {
     public void updateSpecialProgramme(@RequestBody SpecialProgrammesDTO specialProgrammesDTO) {
         specialProgrammesService.updateSpecialProgramme(specialProgrammesDTO);
     }
-    @PostMapping("/delete")
-    public void deleteSpecialProgramme(@RequestBody SpecialProgrammesDTO specialProgrammesDTO){
-        specialProgrammesService.deleteSpecialProgramme(specialProgrammesDTO);
+    @PostMapping("/delete/{studentId}")
+    public void deleteSpecialProgramme(@PathVariable String studentId){
+        specialProgrammesService.deleteSpecialProgramme(studentId);
     }
     @GetMapping("/search/{studentId}")
     public Optional<SpecialProgrammesDTO> searchSpecialProgramme(@PathVariable String studentId){

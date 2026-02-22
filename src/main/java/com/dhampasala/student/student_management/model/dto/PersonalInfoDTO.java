@@ -1,6 +1,5 @@
 package com.dhampasala.student.student_management.model.dto;
 
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +13,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class PersonalInfoDTO {
     private String fullName;
-    private Date birthDate;
-    private Date addmissionDate;
+    private String birthDate;
+    private String addmissionDate;
     private int grade;
     private String phoneNo;
     private String whatsAppNo;
@@ -24,4 +23,5 @@ public class PersonalInfoDTO {
     private String guardianNIC;
     private String occupation;
     private String futureGoal;
+    private Boolean medium;
 }

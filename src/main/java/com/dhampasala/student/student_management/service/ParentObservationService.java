@@ -20,8 +20,8 @@ public class ParentObservationService {
     public void updateParentObservation(ParentObservationDTO parentObservationDTO) {
         parentObservationRepo.save(new ParentObservation(parentObservationDTO.getStudentId(),parentObservationDTO.getFirstTerm(),parentObservationDTO.getSecondTerm(),parentObservationDTO.getThirdTerm()));
     }
-    public void deleteParentObservation(ParentObservationDTO parentObservationDTO){
-        parentObservationRepo.delete(new ParentObservation(parentObservationDTO.getStudentId(),parentObservationDTO.getFirstTerm(),parentObservationDTO.getSecondTerm(),parentObservationDTO.getThirdTerm()));
+    public void deleteParentObservation(String studentId){
+        parentObservationRepo.deleteById(studentId);
     }
     public Optional<ParentObservationDTO> searchParentObservation(String studentId){
         return parentObservationRepo.findById(studentId).map(dto -> new ParentObservationDTO(dto.getStudentId(),dto.getFirstTerm(),dto.getSecondTerm(),dto.getThirdTerm()));

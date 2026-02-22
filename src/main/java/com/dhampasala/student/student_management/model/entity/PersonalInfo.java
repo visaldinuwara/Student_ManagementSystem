@@ -1,5 +1,4 @@
 package com.dhampasala.student.student_management.model.entity;
-import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,8 +20,8 @@ public class PersonalInfo {
       @Id
     private String studentId;
     private String fullName;
-    private Date birthDate;
-    private Date addmissionDate;
+    private String birthDate;
+    private String addmissionDate;
     private int grade;
     private String phoneNo;
     private String whatsAppNo;

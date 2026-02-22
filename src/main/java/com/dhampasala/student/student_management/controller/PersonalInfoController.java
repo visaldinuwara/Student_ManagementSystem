@@ -5,9 +5,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,13 +26,13 @@ public class PersonalInfoController {
     public void addPersonalInfo(@RequestBody PersonalInfoDTO personalInfoDTO){
       personalInfoService.addPersonalInfo(personalInfoDTO);
     }
-    @PostMapping("/update")
-    public void updatePersonalInfo(@RequestBody PersonalInfoDTO personalInfoDTO,String id) {
-      personalInfoService.updatePersonalInfo(personalInfoDTO, id);
+    @PutMapping("/update/{studentId}")
+    public void updatePersonalInfo(@RequestBody PersonalInfoDTO personalInfoDTO,@PathVariable String studentId) {
+      personalInfoService.updatePersonalInfo(personalInfoDTO, studentId);
     }
-    @PostMapping("/delete/{studentId}")
-    public void deletePersonalInfo(@RequestBody PersonalInfoDTO personalInfoDTO,@PathVariable String studentId){
-      personalInfoService.deletePersonalInfo(personalInfoDTO, studentId);
+    @DeleteMapping("/delete/{studentId}")
+    public void deletePersonalInfo(@PathVariable String studentId){
+      personalInfoService.deletePersonalInfo(studentId);
     }
     @GetMapping("/search/{studentId}")
     public Optional<PersonalInfoDTO> searchPersonalInfo(@PathVariable String studentId){

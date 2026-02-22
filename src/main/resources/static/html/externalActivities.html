@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../css/stylesForOther.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Specific tweaks for activity checkboxes to fit the new layout */
         .activity-checkbox-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -26,6 +25,10 @@
             cursor: pointer;
         }
         .checkbox-item input { width: auto; margin: 0; }
+        
+        /* Ensure table columns are balanced */
+        th, td { text-align: center !important; font-size: 0.85rem; }
+        td:nth-child(2) { text-align: left !important; }
     </style>
 </head>
 
@@ -81,10 +84,10 @@
                 </div>
 
                 <div style="margin-top: 25px; display: flex; gap: 12px;">
-                    <button type="button" id="addBtn" onclick="saveActivity()" class="btn btn-save">
+                    <button type="button" id="addBtn" onclick="saveStudentRecord()" class="btn btn-save">
                         <i class="fas fa-save"></i> Save Activity
                     </button>
-                    <button type="button" id="updateBtn" onclick="updateActivity()" class="btn btn-update">
+                    <button type="button" id="updateBtn" onclick="updateActivity()" class="btn btn-update" style="display:none;">
                         <i class="fas fa-sync-alt"></i> Update Record
                     </button>
                     <button type="reset" class="btn btn-outline" onclick="resetForm()">
@@ -102,7 +105,7 @@
                 </div>
                 <div style="display: flex; gap: 10px;">
                     <button class="btn btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Print Registry</button>
-                    <button class="btn btn-danger" onclick="bulkDelete()"><i class="fas fa-trash-alt"></i> Bulk Delete</button>
+                    <button class="btn btn-danger" onclick="deleteSingle()"><i class="fas fa-trash-alt"></i>Delete Selected</button>
                 </div>
             </div>
 
@@ -111,22 +114,24 @@
                     <thead>
                         <tr>
                             <th style="width: 40px;"><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
-                            <th>Student ID</th>
+                            <th style="text-align: left !important;">Student ID</th>
                             <th>Katina</th>
                             <th>Pooja</th>
                             <th>Danaya</th>
                             <th>Bakthi</th>
+                            <th>Paali</th>
+                            <th>English</th>
+                            <th>Concert</th>
                             <th>Marks</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="activityTableBody">
-                        </tbody>
+                    <tbody id="activityTableBody"></tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <script src="../js/externalActivities.js"></script>
+    <script src="../js/externelActivities.js"></script>
 </body>
 </html>

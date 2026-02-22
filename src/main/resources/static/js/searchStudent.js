@@ -1,6 +1,9 @@
 async function searchStudent() {
     let studentId = document.getElementById("searchQuery").value;
     
+    // Clear old data before starting a new search
+    clearFields();
+
     try {
         const response = await fetch(`http://localhost:8080/personalinfo/search/${studentId}`, {
             method: 'GET',
@@ -10,10 +13,9 @@ async function searchStudent() {
         });
 
         if (response.ok) {
-            // 1. FIRST: Get the data from the response
             const result = await response.json();
             
-            // 2. SECOND: Map that data to your HTML fields
+            // Populate all fields
             document.getElementById('fullName').value = result.fullName || "";
             document.getElementById('addmissionDate').value = result.addmissionDate || "";
             document.getElementById('birthDate').value = result.birthDate || "";
@@ -26,20 +28,24 @@ async function searchStudent() {
             document.getElementById('guardianNIC').value = result.guardianNIC || "";
             document.getElementById('occupation').value = result.occupation || "";
 
+            // --- NEW LOGIC FOR MEDIUM ---
+            // If isEnglishMedium is true, set text to "English Medium", otherwise "Sinhala Medium"
+            const mediumField = document.getElementById('viewMedium');
+            if (mediumField) {
+                mediumField.value = result.isEnglishMedium ? "English Medium" : "Sinhala Medium";
+            }
+
             console.log("Fields populated successfully");
             
-            // Note: I removed resetForm() here because you want the user to 
-            // see the data you just searched for!
-            
         } else {
-            const errorText = await response.text();
-            alert("Student not found: " + errorText);
+            alert("Student not found. Please check the ID.");
         }
     } catch (error) {
         console.error('Network Error:', error);
         alert("Failed to connect to the server.");
     }
 }
+
 function clearFields() {
     document.getElementById("fullName").value = "";
     document.getElementById("birthDate").value = "";
@@ -52,4 +58,8 @@ function clearFields() {
     document.getElementById("guardianNIC").value = "";
     document.getElementById("occupation").value = "";
     document.getElementById("futureGoal").value = "";
+    // Clear the new medium field too
+    if(document.getElementById("viewMedium")) {
+        document.getElementById("viewMedium").value = "";
+    }
 }

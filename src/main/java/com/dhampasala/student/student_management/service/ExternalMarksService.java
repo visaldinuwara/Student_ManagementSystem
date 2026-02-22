@@ -15,13 +15,14 @@ public class ExternalMarksService {
       @Autowired
     private ExternalMarksRepo externalMarksRepo;
     public void addExternalMarks(ExternalMarksDTO externalMarksDTO){
+        System.out.println("Adding External Marks for Student ID: " + externalMarksDTO.getStudentId());
         externalMarksRepo.save(new ExternalMarks(externalMarksDTO.getStudentId(),externalMarksDTO.getFirstTerm(),externalMarksDTO.getSecondTerm(),externalMarksDTO.getThirdTerm()));
     }
     public void updateExternalMarks(ExternalMarksDTO externalMarksDTO) {
         externalMarksRepo.save(new ExternalMarks(externalMarksDTO.getStudentId(),externalMarksDTO.getFirstTerm(),externalMarksDTO.getSecondTerm(),externalMarksDTO.getThirdTerm()));
     }
-    public void deleteExternalMarks(ExternalMarksDTO externalMarksDTO){
-        externalMarksRepo.delete(new ExternalMarks(externalMarksDTO.getStudentId(),externalMarksDTO.getFirstTerm(),externalMarksDTO.getSecondTerm(),externalMarksDTO.getThirdTerm()));
+    public void deleteExternalMarks(String studentId){
+        externalMarksRepo.deleteById(studentId);
     }
     public Optional<ExternalMarksDTO> searchExternalMarks(String studentId){
         return externalMarksRepo.findById(studentId).map(dto -> new ExternalMarksDTO(
@@ -39,4 +40,5 @@ public class ExternalMarksService {
         }
         return externalMarksDTOArray;
     }
+  
 }

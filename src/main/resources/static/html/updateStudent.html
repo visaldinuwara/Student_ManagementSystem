@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Student | Sri Vinayalankara Dahampasala</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <link rel="stylesheet" href="../css/styles.css">
 </head>
+
 <body>
     <div class="container">
         <nav class="sidebar">
@@ -18,11 +19,7 @@
             </div>
             <ul>
                 <li><a href="../index.html"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li>
-                    <a href="manageOther.html">
-                        <i class="fas fa-layer-group"></i> Manage Other Details
-                    </a>
-                </li>
+                <li><a href="manageOther.html"><i class="fas fa-layer-group"></i> Manage Other Details</a></li>
                 <li><a href="addStudent.html"><i class="fas fa-plus-circle"></i> Add Student</a></li>
                 <li><a href="viewAll.html"><i class="fas fa-table-list"></i> View All</a></li>
                 <li><a href="searchStudent.html"><i class="fas fa-search"></i> Search</a></li>
@@ -39,13 +36,16 @@
             <div class="content-section">
                 <div class="card" style="margin-bottom: 25px;">
                     <h2><i class="fas fa-id-card" style="color: #3498db;"></i> 1. Search Student to Update</h2>
-                    <p class="text-muted" style="margin-bottom: 15px;">Please fetch the existing record first before making modifications.</p>
-                    
+                    <p class="text-muted" style="margin-bottom: 15px;">Please fetch the existing record first before
+                        making modifications.</p>
+
                     <div class="form-grid">
                         <div class="form-group full-width">
                             <div style="display: flex; gap: 10px;">
-                                <input type="text" id="updateSearchId" placeholder="Enter Id Number or Name..." style="flex: 1;">
-                                <button class="btn btn-save" id="btnFetch" style="background: var(--sidebar-bg);" onclick="fetchStudentForUpdate()">
+                                <input type="text" id="updateSearchId" placeholder="Enter Id Number..."
+                                    style="flex: 1;">
+                                <button class="btn btn-save" id="btnFetch" style="background: var(--sidebar-bg);"
+                                    onclick="fetchStudentForUpdate()">
                                     <i class="fas fa-sync-alt"></i> Fetch Record
                                 </button>
                             </div>
@@ -54,44 +54,35 @@
                 </div>
 
                 <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                        <h2 style="margin: 0;"><i class="fas fa-edit" style="color: #27ae60;"></i> 2. Modify Student Details</h2>
-                        <span id="updateStatus" class="text-muted" style="font-size: 0.85rem;"><i class="fas fa-history"></i> Last fetched: Never</span>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2 style="margin: 0;"><i class="fas fa-edit" style="color: #27ae60;"></i> 2. Modify Student
+                            Details</h2>
+                        <span id="updateStatus" class="text-muted" style="font-size: 0.85rem;"><i
+                                class="fas fa-history"></i> Last fetched: Never</span>
                     </div>
-                    
+
                     <form id="updateForm" onsubmit="event.preventDefault(); updateStudentRecord();">
                         <div class="form-grid">
-                            
+
                             <div class="section-header">
                                 <i class="fas fa-user"></i> Personal Information
                             </div>
-                            
+
                             <div class="form-group full-width">
                                 <label for="fullName">Full Name</label>
-                                <input type="text" id="fullName" name="fullName" placeholder="Full name as per Birth Certificate">
+                                <input type="text" id="fullName" name="fullName"
+                                    placeholder="Full name as per Birth Certificate">
                             </div>
 
                             <div class="form-group">
                                 <label for="birthDate">Birth Date</label>
-                                <input type="date" id="birthDate" name="birthDate">
+                                <input type="text" id="birthDate" name="birthDate">
                             </div>
 
                             <div class="form-group">
                                 <label for="grade">Current Grade</label>
-                                <select id="grade" name="grade">
-                                    <option value="" disabled selected>Select Grade</option>
-                                    <option value="Grade 01">Grade 01</option>
-                                    <option value="Grade 02">Grade 02</option>
-                                    <option value="Grade 03">Grade 03</option>
-                                    <option value="Grade 04">Grade 04</option>
-                                    <option value="Grade 05">Grade 05</option>
-                                    <option value="Grade 06">Grade 06</option>
-                                    <option value="Grade 07">Grade 07</option>
-                                    <option value="Grade 08">Grade 08</option>
-                                    <option value="Grade 09">Grade 09</option>
-                                    <option value="Grade 10">Grade 10</option>
-                                    <option value="Dharmacharya">Dharmacharya</option>
-                                </select>
+                                <input type="text" id="grade" name="grade">
                             </div>
 
                             <div class="form-group">
@@ -106,7 +97,7 @@
 
                             <div class="form-group">
                                 <label for="admissionDate">Admission Date</label>
-                                <input type="date" id="admissionDate" name="admissionDate">
+                                <input type="text" id="admissionDate" name="admissionDate">
                             </div>
 
                             <div class="form-group">
@@ -114,9 +105,25 @@
                                 <input type="text" id="futureGoal" name="futureGoal" placeholder="e.g. Doctor, Teacher">
                             </div>
 
+                            <div class="form-group">
+                                <label>Medium of Instruction</label>
+                                <div style="display: flex; gap: 20px; margin-top: 10px;">
+                                    <label
+                                        style="display: flex; align-items: center; gap: 8px; font-weight: 400; cursor: pointer;">
+                                        <input type="radio" id="sinhalaMedium" name="medium" value="sinhala" checked>
+                                        Sinhala
+                                    </label>
+                                    <label
+                                        style="display: flex; align-items: center; gap: 8px; font-weight: 400; cursor: pointer;">
+                                        <input type="radio" id="englishMedium" name="medium" value="english"> English
+                                    </label>
+                                </div>
+                            </div>
+
                             <div class="form-group full-width">
                                 <label for="address">Address</label>
-                                <textarea id="address" name="address" rows="2" placeholder="Residential Address"></textarea>
+                                <textarea id="address" name="address" rows="2"
+                                    placeholder="Residential Address"></textarea>
                             </div>
 
                             <div class="section-header">
@@ -125,7 +132,8 @@
 
                             <div class="form-group">
                                 <label for="guardianName">Guardian Name</label>
-                                <input type="text" id="guardianName" name="guardianName" placeholder="Parent or Guardian Name">
+                                <input type="text" id="guardianName" name="guardianName"
+                                    placeholder="Parent or Guardian Name">
                             </div>
 
                             <div class="form-group">
@@ -135,15 +143,16 @@
 
                             <div class="form-group full-width">
                                 <label for="occupation">Occupation</label>
-                                <input type="text" id="occupation" name="occupation" placeholder="Guardian's current employment">
+                                <input type="text" id="occupation" name="occupation"
+                                    placeholder="Guardian's current employment">
                             </div>
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-save" onclick="updateStudentRecord()">
+                            <button type="submit" class="btn btn-save">
                                 <i class="fas fa-save"></i> Save Changes
                             </button>
-                            <button type="button" class="btn btn-outline" onclick="reload()">
+                            <button type="button" class="btn btn-outline" onclick="location.reload()">
                                 <i class="fas fa-undo"></i> Reset Form
                             </button>
                         </div>
@@ -155,4 +164,5 @@
 
     <script src="../js/updateStudent.js"></script>
 </body>
+
 </html>

@@ -3,14 +3,12 @@ const API_URL = "http://localhost:8080/specialProgrammes";
 // 1. Initialize Page
 document.addEventListener('DOMContentLoaded', () => {
     loadAllProgrammes();
-    // Default UI state
-    document.getElementById('updateBtn').style.display = 'none';
 });
 
-// 2. Fetch all records from Java Backend
+// 2. Fetch all records for the Table
 async function loadAllProgrammes() {
     try {
-        const response = await fetch(`${API_URL}/all`);
+        const response = await fetch(`${API_URL}/getAll`);
         if (response.ok) {
             const data = await response.json();
             renderTable(data);
@@ -20,26 +18,28 @@ async function loadAllProgrammes() {
     }
 }
 
-// 3. Render Table Rows
+// 3. Render Table
 function renderTable(records) {
-    const tableBody = document.getElementById('dataTableBody');
+    const tableBody = document.getElementById('programmeTableBody');
     tableBody.innerHTML = '';
 
     records.forEach(record => {
+        // Matches your Java fields: studentID, programmeName, month, marks
+        const sId = record.studentID || "N/A";
+        const pName = record.programmeName || "N/A";
+        const month = record.month || "N/A";
+        const marks = parseFloat(record.marks) || 0;
+
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td><input type="checkbox" class="record-checkbox" value="${record.studentId}"></td>
-            <td style="font-weight:600;">${record.studentId}</td>
-            <td>${record.programmeName || "-"}</td>
-            <td><span class="badge-status">${record.participationLevel || "Participant"}</span></td>
-            <td><strong>${record.marks ? record.marks.toFixed(2) : "0.00"}</strong></td>
-            <td><small>${record.remarks || "-"}</small></td>
+            <td><input type="checkbox" class="record-checkbox" value="${sId}"></td>
+            <td style="font-weight:600;">${sId}</td>
+            <td>${pName}</td>
+            <td>${month}</td>
+            <td><strong style="color: #2c3e50;">${marks.toFixed(1)}</strong></td>
             <td>
-                <button class="btn btn-outline" style="padding:4px 8px;" onclick="editProgramme('${record.studentId}')">
+                <button class="btn btn-outline" style="padding:4px 8px; margin-right:5px;" onclick="editProgramme('${sId}')" title="Edit">
                     <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-outline" style="padding:4px 8px; color:red;" onclick="deleteSingle('${record.studentId}')">
-                    <i class="fas fa-trash"></i>
                 </button>
             </td>
         `;
@@ -49,30 +49,37 @@ function renderTable(records) {
 
 // 4. Save Record (POST)
 async function saveProgramme() {
-    const studentId = document.getElementById('studentId').value;
-    if (!studentId) return alert("Student ID is required");
-
     const data = collectFormData();
+    
+    if (!data.studentID || !data.programmeName) {
+        alert("Please fill in the Student ID and Programme Name");
+        return; 
+    }
 
     try {
-        const response = await fetch(`${API_URL}/add`, {
+        const response = await fetch(`${API_URL}/save`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
 
         if (response.ok) {
-            alert("Programme data saved!");
+            alert("Programme record saved!");
             resetForm();
             loadAllProgrammes();
+        } else {
+            alert("Server Error: Check backend logs.");
         }
     } catch (error) {
-        alert("Server Error: Could not save.");
+        console.error("Network Error:", error);
     }
 }
 
 // 5. Update Record (PUT)
 async function updateProgramme() {
+    const studentId = document.getElementById('studentID').value;
+    if (!studentId) return alert("No student selected to update.");
+    
     const data = collectFormData();
 
     try {
@@ -86,60 +93,68 @@ async function updateProgramme() {
             alert("Record updated successfully!");
             resetForm();
             loadAllProgrammes();
+        } else {
+            alert("Update failed.");
         }
     } catch (error) {
-        console.error("Update Error:", error);
+        console.error("Update error:", error);
     }
 }
 
-// 6. Helper: Collect Data from UI
+// 6. Collect Form Data
 function collectFormData() {
     return {
-        studentId: document.getElementById('studentId').value,
-        programmeName: document.getElementById('programmeName')?.value || "", 
-        participationLevel: document.getElementById('participationLevel')?.value || "",
-        marks: parseFloat(document.getElementById('marks').value) || 0.0,
-        remarks: document.getElementById('other').value // Mapping 'other' textarea to remarks
+        studentID: document.getElementById('studentID').value.trim(),
+        programmeName: document.getElementById('programmeName').value.trim(),
+        month: document.getElementById('month').value,
+        marks: parseFloat(document.getElementById('marks').value) || 0.0
     };
 }
 
-// 7. Edit Mode: Load data back into form
+// 7. Edit (Load data back into form)
 async function editProgramme(id) {
     try {
         const response = await fetch(`${API_URL}/search/${id}`);
         if (response.ok) {
             const r = await response.json();
             
-            document.getElementById('studentId').value = r.studentId;
-            if(document.getElementById('programmeName')) document.getElementById('programmeName').value = r.programmeName;
+            document.getElementById('studentID').value = r.studentID;
+            document.getElementById('programmeName').value = r.programmeName;
+            document.getElementById('month').value = r.month;
             document.getElementById('marks').value = r.marks;
-            document.getElementById('other').value = r.remarks || r.other;
 
-            // UI Changes
-            document.getElementById('studentId').readOnly = true;
-            document.getElementById('addBtn').style.display = 'none';
-            document.getElementById('updateBtn').style.display = 'inline-block';
+            // UI State adjustments
+            document.getElementById('studentID').readOnly = true;
+            document.querySelector('.btn-save').style.display = 'none';
+            document.querySelector('.btn-update').style.display = 'inline-flex';
             document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Programme Record';
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     } catch (error) {
-        console.error("Fetch error");
+        console.error("Fetch error:", error);
     }
 }
 
-// 8. Delete Single Record
-async function deleteSingle(id) {
-  const data=collectFormData();
-    if (confirm(`Delete special programme record for ${id}?`)) {
-        const data = collectFormData(); 
+// 8. Delete Single
+async function deleteSingle() {
+    const selectedCheckbox = document.querySelector('.record-checkbox:checked');
+    if (!selectedCheckbox) return alert("Please select a record to delete.");
+    
+    const id = selectedCheckbox.value;
+
+    if (confirm(`Delete record for ${id}?`)) {
         try {
-            const response = await fetch(`${API_URL}/delete`, { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+            const response = await fetch(`${API_URL}/delete/${id}`, { 
+                method: 'POST', // Usually DELETE for specific ID
             });
-            if (response.ok) loadAllProgrammes();
+
+            if (response.ok) {
+                loadAllProgrammes();
+                resetForm();
+            }
         } catch (error) {
-            alert("Delete failed.");
+            console.error("Delete error:", error);
         }
     }
 }
@@ -147,7 +162,7 @@ async function deleteSingle(id) {
 // 9. Utility: Search Table
 function searchTable() {
     const input = document.getElementById("searchInput").value.toLowerCase();
-    const rows = document.querySelectorAll("#dataTableBody tr");
+    const rows = document.querySelectorAll("#programmeTableBody tr");
     rows.forEach(row => {
         row.style.display = row.innerText.toLowerCase().includes(input) ? "" : "none";
     });
@@ -155,14 +170,14 @@ function searchTable() {
 
 // 10. Utility: Reset Form
 function resetForm() {
-    document.getElementById('rankForm').reset(); // Assuming the form ID remains the same or matches your HTML
-    document.getElementById('studentId').readOnly = false;
-    document.getElementById('addBtn').style.display = 'inline-block';
-    document.getElementById('updateBtn').style.display = 'none';
-    document.getElementById('form-title').innerHTML = '<i class="fas fa-medal"></i> Leadership & Rank Entry';
+    document.getElementById('programmeForm').reset();
+    document.getElementById('studentID').readOnly = false;
+    document.querySelector('.btn-save').style.display = 'inline-flex';
+    document.querySelector('.btn-update').style.display = 'none';
+    document.getElementById('form-title').innerHTML = '<i class="fas fa-star"></i> Special Programme Records';
 }
 
-// 11. Bulk Checkbox Selection
+// 11. Toggle Select All
 function toggleAll(source) {
     const checkboxes = document.querySelectorAll('.record-checkbox');
     checkboxes.forEach(cb => cb.checked = source.checked);

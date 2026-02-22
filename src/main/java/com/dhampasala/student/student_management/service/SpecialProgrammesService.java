@@ -20,8 +20,8 @@ public class SpecialProgrammesService {
     public void updateSpecialProgramme(SpecialProgrammesDTO specialProgrammesDTO) {
         specialProgrammesRepo.save(new SpecialProgrammes(specialProgrammesDTO.getStudentID(),specialProgrammesDTO.getMonth(),specialProgrammesDTO.getProgrammeName(),specialProgrammesDTO.getMarks()));
     }
-    public void deleteSpecialProgramme(SpecialProgrammesDTO specialProgrammesDTO){
-        specialProgrammesRepo.delete(new SpecialProgrammes(specialProgrammesDTO.getStudentID(),specialProgrammesDTO.getMonth(),specialProgrammesDTO.getProgrammeName(),specialProgrammesDTO.getMarks()));
+    public void deleteSpecialProgramme(String studentId){
+        specialProgrammesRepo.deleteById(studentId);
     }
     public Optional<SpecialProgrammesDTO> searchSpecialProgramme(String studentId){
         return specialProgrammesRepo.findById(studentId).map(dto -> new SpecialProgrammesDTO(dto.getStudentID(),dto.getMonth(),dto.getProgrammeName(),dto.getMarks()));

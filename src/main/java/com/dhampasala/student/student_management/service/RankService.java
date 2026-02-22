@@ -20,8 +20,8 @@ public class RankService {
     public void updateRank(RankDTO rankDTO) {
         rankRepo.save(new Rank(rankDTO.getStudentId(),rankDTO.isPrefect(),rankDTO.isClassMonitor(),rankDTO.getOther(),rankDTO.getMarks()));
     }
-    public void deleteRank(RankDTO rankDTO){
-        rankRepo.delete(new Rank(rankDTO.getStudentId(),rankDTO.isPrefect(),rankDTO.isClassMonitor(),rankDTO.getOther(),rankDTO.getMarks()));
+    public void deleteRank(String StudentId){
+        rankRepo.deleteById(StudentId);
     }
     public Optional<RankDTO> searchRank(String studentId){
         return rankRepo.findById(studentId).map(dto -> new RankDTO(dto.getStudentId(),dto.isPrefect(),dto.isClassMonitor(),dto.getOther(),dto.getMarks()));

@@ -18,36 +18,55 @@ async function loadAllRecords() {
     }
 }
 
-// 3. Render Table Rows
+/**
+ * Renders the data table with boolean fields displayed as "Yes" or "No".
+ * Maps Java fields: dinisuru, ransilu, praknapradeepa, sisumini, svarnavarna, svarnabushana
+ */
 function renderTable(records) {
     const tableBody = document.getElementById('dataTableBody');
+    if (!tableBody) return;
+    
     tableBody.innerHTML = '';
 
     records.forEach(record => {
-        // Create a visual string for the activities (Matrix)
-        const matrix = [
-            record.katinaPerahara ? 'K' : '-',
-            record.buddhaPooja ? 'B' : '-',
-            record.danaya ? 'D' : '-',
-            record.bakthiGeetha ? 'BG' : '-',
-            record.paaliDay ? 'P' : '-',
-            record.englishDay ? 'E' : '-',
-            record.concert ? 'C' : '-'
-        ].join(' / ');
+        // Helper to convert boolean to Yes/No text
+        const formatBool = (val) => val ? '<span style="color:#2e7d32; font-weight:bold;">Yes</span>' : '<span style="color:#d32f2f;">No</span>';
+
+        // Creating a descriptive list for the matrix column
+        const matrixHTML = `
+            <div style="font-size: 0.85rem; line-height: 1.4;">
+                Dinisuru: ${formatBool(record.dinisuru)} | 
+                Ransilu: ${formatBool(record.ransilu)} | 
+                Prakna: ${formatBool(record.praknapradeepa)} <br>
+                Sisumini: ${formatBool(record.sisumini)} | 
+                Svarnavarna: ${formatBool(record.svarnavarna)} | 
+                Svarnabushana: ${formatBool(record.svarnabushana)}
+            </div>
+        `;
 
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td><input type="checkbox" class="record-checkbox" value="${record.studentId}"></td>
-            <td style="font-weight:600;">${record.studentId}</td>
-            <td><small>${matrix}</small></td>
-            <td><span class="badge" style="background:#e3f2fd; color:#1976d2; padding:4px 8px; border-radius:4px;">${record.marks.toFixed(1)}</span></td>
-            <td>
-                <button class="btn btn-outline" style="padding:4px 8px;" onclick="editRecord('${record.studentId}')">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-outline" style="padding:4px 8px; color:red;" onclick="deleteSingle('${record.studentId}')">
-                    <i class="fas fa-trash"></i>
-                </button>
+            <td style="vertical-align: middle;">
+                <input type="checkbox" class="record-checkbox" value="${record.studentID}">
+            </td>
+            <td style="font-weight:600; vertical-align: middle;">
+                ${record.studentID}
+            </td>
+            <td style="vertical-align: middle;">
+                ${matrixHTML}
+            </td>
+            <td style="vertical-align: middle;">
+                <span class="badge" style="background:#e8f5e9; color:#2e7d32; padding:6px 10px; border-radius:4px; font-weight:bold;">
+                    ${(record.totalMarks || 0).toFixed(1)}
+                </span>
+            </td>
+            <td style="vertical-align: middle;">
+                <div style="display: flex; gap: 5px;">
+                    <button class="btn btn-outline" onclick="editRecord('${record.studentID}')" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+    
+                </div>
             </td>
         `;
         tableBody.appendChild(row);
@@ -72,87 +91,122 @@ async function saveData() {
             alert("Record Saved Successfully!");
             resetForm();
             loadAllRecords();
+        } else {
+            const err = await response.text();
+            alert("Save failed: " + err);
         }
     } catch (error) {
-        alert("Error saving record");
+        alert("Error connecting to server");
     }
 }
 
 // 5. Update Existing Record (PUT)
 async function updateData() {
     const studentId = document.getElementById('studentId').value;
+    if (!studentId) return alert("No Student ID selected to update");
+
     const data = collectFormData();
 
     try {
         const response = await fetch(`${API_URL}/update`, {
-            method: 'PUT',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
 
         if (response.ok) {
-            alert("Record Updated!");
+            alert("Record for " + studentId + " updated successfully!");
             resetForm();
             loadAllRecords();
+        } else {
+            alert("Update failed. Please check if the record exists.");
         }
     } catch (error) {
         console.error("Update Error:", error);
+        alert("Network error during update.");
     }
 }
 
 // 6. Helper: Collect Data from UI
 function collectFormData() {
     return {
-        studentId: document.getElementById('studentId').value,
-        katinaPerahara: document.getElementById('katinaPerahara').checked,
-        buddhaPooja: document.getElementById('buddhaPooja').checked,
-        danaya: document.getElementById('danaya').checked,
-        bakthiGeetha: document.getElementById('bakthiGeetha').checked,
-        paaliDay: document.getElementById('paaliDay').checked,
-        englishDay: document.getElementById('englishDay').checked,
-        concert: document.getElementById('concert').checked,
-        marks: parseFloat(document.getElementById('marks').value) || 0.0,
-        other: document.getElementById('other').value
+        studentID: document.getElementById('studentId').value,
+        dinisuru: document.getElementById('dinisuru').checked,
+        ransilu: document.getElementById('ransilu').checked,
+        praknapradeepa: document.getElementById('praknapradeepa').checked,
+        sisumini: document.getElementById('sisumini').checked,
+        svarnavarna: document.getElementById('svarnavarna').checked,
+        svarnabushana: document.getElementById('svarnabushana').checked,
+        totalMarks: document.getElementById('totalMarks').value || 0.0,
     };
 }
 
-// 7. Edit Record: Load data back into form
+/**
+ * Fetches student data and prepares the UI for updating an existing record.
+ * This hides the Add button and shows the Update button.
+ */
 async function editRecord(id) {
     try {
         const response = await fetch(`${API_URL}/search/${id}`);
         if (response.ok) {
             const r = await response.json();
-            document.getElementById('studentId').value = r.studentId;
-            document.getElementById('katinaPerahara').checked = r.katinaPerahara;
-            document.getElementById('buddhaPooja').checked = r.buddhaPooja;
-            document.getElementById('danaya').checked = r.danaya;
-            document.getElementById('bakthiGeetha').checked = r.bakthiGeetha;
-            document.getElementById('paaliDay').checked = r.paaliDay;
-            document.getElementById('englishDay').checked = r.englishDay;
-            document.getElementById('concert').checked = r.concert;
-            document.getElementById('marks').value = r.marks;
-            document.getElementById('other').value = r.other;
+            
+            // Populate form fields
+            document.getElementById('studentId').value = r.studentID;
+            document.getElementById('dinisuru').checked = r.dinisuru;
+            document.getElementById('ransilu').checked = r.ransilu;
+            document.getElementById('praknapradeepa').checked = r.praknapradeepa;
+            document.getElementById('sisumini').checked = r.sisumini;
+            document.getElementById('svarnavarna').checked = r.svarnavarna;
+            document.getElementById('svarnabushana').checked = r.svarnabushana;
+            document.getElementById('totalMarks').value = r.totalMarks;
 
-            // Lock ID and change UI state
+            // UI State Transformation for Editing
             document.getElementById('studentId').readOnly = true;
-            document.getElementById('addBtn').disabled = true;
+            
+            // Ensure Add button is completely hidden
+            const addBtn = document.getElementById('addBtn');
+            addBtn.hidden = true; 
+            addBtn.style.display = "none"; // Forced CSS override
+            
+            // Show Update button
+            const updateBtn = document.getElementById('updateBtn');
+            updateBtn.hidden = false;
+            updateBtn.style.display = "inline-flex";
+            
+            // Update UI Header
             document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Activity Record';
+            
+            // Smooth scroll to top to see the form
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     } catch (error) {
-        console.error("Fetch record error");
+        console.error("Error fetching record for edit:", error);
     }
 }
 
 // 8. Delete Single Record
-async function deleteSingle(id) {
-    const data=collectFormData();
-    if (confirm(`Delete record for ${id}?`)) {
-        await fetch(`${API_URL}/delete`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        loadAllRecords();
+async function deleteSingle() {
+    const selectedCheckbox = document.querySelector('.record-checkbox:checked');
+    if (!selectedCheckbox) return alert("No Student ID selected to delete");
+    const id = selectedCheckbox.value;
+
+    if (confirm(`Are you sure you want to delete record: ${id}?`)) {
+        try {
+            const response = await fetch(`${API_URL}/delete/${id}`, {
+                method: 'POST',
+            });
+            
+            if (response.ok) {
+                loadAllRecords();
+                // If we were editing the same record we just deleted, reset the form
+                if (document.getElementById('studentId').value === id) resetForm();
+            } else {
+                alert("Could not delete record.");
+            }
+        } catch (error) {
+            console.error("Delete Error:", error);
+        }
     }
 }
 
@@ -170,6 +224,7 @@ function resetForm() {
     document.getElementById('activityForm').reset();
     document.getElementById('studentId').readOnly = false;
     document.getElementById('addBtn').disabled = false;
+    // Hide update button if you prefer toggling it, or keep it visible
     document.getElementById('form-title').innerHTML = '<i class="fas fa-user-plus"></i> Add External Activity Record';
 }
 
