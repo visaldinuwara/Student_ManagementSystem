@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Marks | Sri Vinayalankara Dahampasala</title>
+    <link rel="stylesheet" href="../css/stylesForOther.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <i class="fas fa-dharmachakra fa-2x" style="color: #f1c40f;"></i>
+            <h1 style="font-size: 1.2rem; margin: 0;">Sri Vinayalankara Dahampasala</h1>
+        </div>
+        <a href="../index.html" class="nav-link" style="color: white; text-decoration: none;">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </nav>
+
+    <div class="main-container">
+        <div class="card">
+            <h2 id="form-title" style="color: var(--accent); margin-top: 0;">
+                <i class="fas fa-calculator"></i> Student Marks
+            </h2>
+            <form id="totalMarksForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Student ID</label>
+                        <input type="text" id="studentId" placeholder="SVD/001" onchange="fetchStudentName(this.value)" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Student Name</label>
+                        <input type="text" id="studentName" placeholder="Enter Full Name" required >
+                    </div>
+                    <div class="form-group">
+                        <label>Total Marks</label>
+                        <input type="number" id="finalTotal" placeholder="0.0" required>
+                    </div>
+                </div>
+
+                <div style="margin-top: 25px; display: flex; gap: 12px;">
+                    <button type="button" id="addBtn" onclick="saveFinalMarks()" class="btn btn-save">
+                        <i class="fas fa-save"></i> Save Record
+                    </button>
+                    <button type="button" id="updateBtn" onclick="updateFinalMarks()" class="btn btn-update" style="display:none;">
+                        <i class="fas fa-sync-alt"></i> Update Record
+                    </button>
+                    <button type="reset" class="btn btn-outline" onclick="resetTotalForm()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="toolbar" style="display: flex; justify-content: space-between; align-items: center; gap: 15px;">
+                <div class="search-container" style="flex-grow: 1;">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Quick search Student ID..." onkeyup="searchTable()">
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline" onclick="window.print()">
+                        <i class="fas fa-print"></i> Print List
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteSelectedRecords()">
+                        <i class="fas fa-trash-alt"></i> Delete Selected
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" id="selectAll" onclick="toggleAllRows(this)"></th>
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                            <th>Total Marks</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="finalMarksTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/totalMarks.js"></script>
+</body>
+</html>

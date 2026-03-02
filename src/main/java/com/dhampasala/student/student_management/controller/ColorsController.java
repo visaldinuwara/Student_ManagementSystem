@@ -22,7 +22,6 @@ public class ColorsController {
     private ColorsService colorsService;
     @PostMapping("/save")
     public void addColors(@RequestBody ColorsDTO colorsDTO){
-      System.out.println("Received ColorsDTO: " + colorsDTO);
       colorsService.addColors(colorsDTO);
     }
     @PostMapping("/update")

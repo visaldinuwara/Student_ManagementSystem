@@ -88,6 +88,7 @@ async function saveData() {
         });
 
         if (response.ok) {
+            addingToTotalMarks(studentId, data.totalMarks); // Update total marks after saving the record
             alert("Record Saved Successfully!");
             resetForm();
             loadAllRecords();
@@ -99,14 +100,13 @@ async function saveData() {
         alert("Error connecting to server");
     }
 }
-
+let originalTotalMarks = 0; // Global variable to store original total marks for updating
 // 5. Update Existing Record (PUT)
 async function updateData() {
     const studentId = document.getElementById('studentId').value;
     if (!studentId) return alert("No Student ID selected to update");
 
     const data = collectFormData();
-
     try {
         const response = await fetch(`${API_URL}/update`, {
             method: 'POST',
@@ -115,6 +115,7 @@ async function updateData() {
         });
 
         if (response.ok) {
+            updatingTotalMarks(studentId,originalTotalMarks,data.totalMarks)
             alert("Record for " + studentId + " updated successfully!");
             resetForm();
             loadAllRecords();
@@ -160,7 +161,7 @@ async function editRecord(id) {
             document.getElementById('svarnavarna').checked = r.svarnavarna;
             document.getElementById('svarnabushana').checked = r.svarnabushana;
             document.getElementById('totalMarks').value = r.totalMarks;
-
+            originalTotalMarks = r.totalMarks; // Store original marks for later comparison
             // UI State Transformation for Editing
             document.getElementById('studentId').readOnly = true;
             
@@ -232,4 +233,88 @@ function resetForm() {
 function toggleAll(source) {
     const checkboxes = document.querySelectorAll('.record-checkbox');
     checkboxes.forEach(cb => cb.checked = source.checked);
+}
+function calculateLiveMarks(totalMarks,isChecked) {
+    if(Number(totalMarks)==250 && isChecked){
+        document.getElementById('totalMarks').value=(Number(totalMarks)+250);
+    }else{
+    if(isChecked){
+        document.getElementById('totalMarks').value = (Number(totalMarks) + 50);
+    }else if(Number(totalMarks)>0){
+        document.getElementById('totalMarks').value = (Number(totalMarks)-50);
+    }else{
+        document.getElementById('totalMarks').value = totalMarks;
+    }
+    }
+}
+async function addingToTotalMarks(studentId, totalMarks) {
+    try {
+        const res1 = await fetch(`http://localhost:8080/totalMarks/search/${studentId}`);
+        
+        if (res1.ok) {
+            const data1 = await res1.json();
+            
+            if (data1!=null) { // Check if record exists
+                const currentMarks = parseFloat(data1.totalMarks) || 0.0;
+                const newMarks = parseFloat(currentMarks) + parseFloat(totalMarks);
+                
+                await fetch(`http://localhost:8080/totalMarks/update`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        studentId: studentId, 
+                        studentName: data1.studentName, // Fixed variable name
+                        totalMarks: newMarks // Ensure key matches your Java Entity
+                    })
+                });
+            } else {
+                // If not in totalMarks, check personalinfo
+                const res2 = await fetch(`http://localhost:8080/personalinfo/search/${studentId}`);
+                if (res2.ok) {
+                    const data2 = await res2.json();
+                    const newMarks = totalMarks; // Starting marks for new record
+                    
+                    await fetch(`http://localhost:8080/totalMarks/save`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            studentId: studentId, 
+                            studentName: data2.fullName, 
+                            totalMarks: newMarks 
+                        })
+                    });
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Adding Error:", error);
+    }
+}
+// Make sure you pass originalDaysPresent into the function!
+async function updatingTotalMarks(studentId,originalTotalMarks,totalMarksOfC) {
+    try {
+        const res = await fetch(`http://localhost:8080/totalMarks/search/${studentId}`);
+        if (res.ok) {
+            const data = await res.json();
+            if (data) {
+                const oldInputMarks = parseFloat(originalTotalMarks) || 0;
+                const newInputMarks = parseFloat(totalMarksOfC) || 0;
+
+                // Subtract old, add new
+                const totalMarks = (parseFloat(data.totalMarks) || 0.0) - oldInputMarks + newInputMarks;
+
+                await fetch(`http://localhost:8080/totalMarks/update`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        studentId: studentId, 
+                        studentName: data.studentName, 
+                        totalMarks: totalMarks 
+                    })
+                });
+            }
+        }
+    } catch (error) {
+        console.error("Update Error:", error);
+    }
 }

@@ -1,15 +1,11 @@
 const API_URL = "http://localhost:8080/studentattendence";
 
-// 1. Initialize Page
 document.addEventListener('DOMContentLoaded', () => {
     loadAttendanceRecords();
     const updateBtn = document.getElementById('updateBtn');
     if (updateBtn) updateBtn.style.display = 'none';
 });
 
-/**
- * BULK OPERATIONS
- */
 function toggleAll(source) {
     const checkboxes = document.querySelectorAll('.record-checkbox');
     checkboxes.forEach(cb => cb.checked = source.checked);
@@ -47,9 +43,6 @@ async function bulkDelete() {
     }
 }
 
-/**
- * CORE CRUD OPERATIONS
- */
 
 // Fetch all records
 async function loadAttendanceRecords() {
@@ -68,13 +61,13 @@ async function loadAttendanceRecords() {
 function renderTable(records) {
     const tableBody = document.getElementById('dataTableBody');
     if (!tableBody) return;
-    
+
     tableBody.innerHTML = '';
 
     records.forEach(record => {
         const days = record.daysPresent || 0;
         let statusBadge = '';
-        
+
         if (days >= 4) {
             statusBadge = '<span style="color: #27ae60; font-weight: bold;"><i class="fas fa-star"></i> EXCELLENT</span>';
         } else if (days >= 2) {
@@ -95,22 +88,13 @@ function renderTable(records) {
                 <button class="btn btn-outline" onclick="editAttendance('${record.studentId}')" title="Edit" style="padding:4px 8px; margin-right:5px;">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-outline" onclick="deleteSingle('${record.studentId}')" title="Delete" style="padding:4px 8px; color:#e74c3c;">
-                    <i class="fas fa-trash"></i>
-                </button>
             </td>
         `;
         tableBody.appendChild(row);
     });
 }
-
-/**
- * Single delete function using POST with PathVariable
- * Targets: @PostMapping("/delete/{studentId}")
- */
-// 6. Delete Single Record (Selected from Table)
+//Delete
 async function deleteSingle() {
-    // Look for the first checked checkbox in the table body
     const selectedCheckbox = document.querySelector('.record-checkbox:checked');
 
     if (!selectedCheckbox) {
@@ -124,14 +108,14 @@ async function deleteSingle() {
             const response = await fetch(`${API_URL}/delete/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ studentId: id }) 
+                body: JSON.stringify({ studentId: id })
             });
 
             if (response.ok) {
                 alert("Deleted successfully.");
                 loadAttendanceRecords();
                 // Clear form if we happened to be editing that student
-                if(document.getElementById('studentId').value === id) resetForm();
+                if (document.getElementById('studentId').value === id) resetForm();
             } else {
                 alert("Could not delete record.");
             }
@@ -164,6 +148,7 @@ async function saveAttendance() {
         });
 
         if (response.ok) {
+            await addingToTotalMarks(studentId, data.daysPresent);
             resetForm();
             loadAttendanceRecords();
         } else {
@@ -173,7 +158,7 @@ async function saveAttendance() {
         alert("Error connecting to server.");
     }
 }
-
+let originalDaysPresent = 0; // when its updating this is the variable used to update totalmarks
 // Update Record
 async function updateAttendance() {
     const data = collectFormData();
@@ -185,6 +170,7 @@ async function updateAttendance() {
         });
 
         if (response.ok) {
+            await updatingTotalMarks(data.studentId, originalDaysPresent,data.daysPresent);
             resetForm();
             loadAttendanceRecords();
         }
@@ -193,9 +179,6 @@ async function updateAttendance() {
     }
 }
 
-/**
- * HELPERS
- */
 function collectFormData() {
     return {
         studentId: document.getElementById('studentId').value,
@@ -204,7 +187,6 @@ function collectFormData() {
         daysPresent: parseInt(document.getElementById('daysPresent').value) || 0
     };
 }
-
 async function editAttendance(id) {
     try {
         const response = await fetch(`${API_URL}/search/${id}`);
@@ -214,7 +196,7 @@ async function editAttendance(id) {
             document.getElementById('year').value = r.year;
             document.getElementById('month').value = r.month;
             document.getElementById('daysPresent').value = r.daysPresent;
-
+            originalDaysPresent = r.daysPresent; // Store original days present for update calculations
             document.getElementById('studentId').readOnly = true;
             document.getElementById('addBtn').style.display = 'none';
             document.getElementById('updateBtn').style.display = 'inline-block';
@@ -242,4 +224,75 @@ function resetForm() {
     document.getElementById('updateBtn').style.display = 'none';
     document.getElementById('form-title').innerHTML = '<i class="fas fa-calendar-check"></i> Monthly Attendance Entry';
     document.getElementById('year').value = "2026";
+}
+async function addingToTotalMarks(studentId, presentDays) {
+    try {
+        const res1 = await fetch(`http://localhost:8080/totalMarks/search/${studentId}`);
+        
+        if (res1.ok) {
+            const data1 = await res1.json();
+            
+            if (data1!=null) { // Check if record exists
+                const currentMarks = parseFloat(data1.totalMarks) || 0.0;
+                const newMarks = parseFloat(currentMarks) + (parseInt(presentDays) * 10);
+                
+                await fetch(`http://localhost:8080/totalMarks/update`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        studentId: studentId, 
+                        studentName: data1.studentName, // Fixed variable name
+                        totalMarks: newMarks // Ensure key matches your Java Entity
+                    })
+                });
+            } else {
+                // If not in totalMarks, check personalinfo
+                const res2 = await fetch(`http://localhost:8080/personalinfo/search/${studentId}`);
+                if (res2.ok) {
+                    const data2 = await res2.json();
+                    const newMarks = (parseInt(presentDays) * 10); // Starting marks for new record
+                    
+                    await fetch(`http://localhost:8080/totalMarks/save`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            studentId: studentId, 
+                            studentName: data2.fullName, 
+                            totalMarks: newMarks 
+                        })
+                    });
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Adding Error:", error);
+    }
+}
+// Make sure you pass originalDaysPresent into the function!
+async function updatingTotalMarks(studentId,originalDaysPresent, presentDays) {
+    try {
+        const res = await fetch(`http://localhost:8080/totalMarks/search/${studentId}`);
+        if (res.ok) {
+            const data = await res.json();
+            if (data) {
+                const oldInputMarks = (parseFloat(originalDaysPresent) || 0) * 10;
+                const newInputMarks = (parseFloat(presentDays) || 0) * 10;
+                
+                // Subtract old, add new
+                const totalMarks = (parseFloat(data.totalMarks) || 0.0) - parseFloat(oldInputMarks) + parseFloat(newInputMarks);
+
+                await fetch(`http://localhost:8080/totalMarks/update`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        studentId: studentId, 
+                        studentName: data.studentName, 
+                        totalMarks: totalMarks 
+                    })
+                });
+            }
+        }
+    } catch (error) {
+        console.error("Update Error:", error);
+    }
 }
